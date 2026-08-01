@@ -1,7 +1,7 @@
 :root {
-    --button-default-padding: 5px;
+    --button-default-padding: 24px;
     --button-default-bordersize: 2px;
-    --button-default-borderradius: 10px;
+    --button-default-borderradius: 24px;
 
     --button-transition-default-style: ease-out;
     --button-transition-default-time: .2s;
@@ -46,14 +46,40 @@
 
     /* Otros */
     --button-option-borderradius: 0;
-    --button-option-padding: 10px;
+    --button-option-padding: 5px;
 
     --button-source-backgroundcolor: rgb(218, 218, 218);
     --button-source-borrderradius: 2px;
     --button-source-bordersize: 0px;
     --button-source-bordercolor: rgb(153, 153, 153);
     --button-source-color: rgb(27, 27, 27);
-    --button-source-padding: 5px;
+    --button-source-padding: 2px;
+
+    /* Nuevas variables para los botones de la home */
+    --home-action-min-height: 76px;
+    --home-action-mobile-min-height: 82px;
+    --home-action-padding: 1rem 1.4rem;
+    --home-action-border-radius: 18px;
+    --home-action-border-size: 2px;
+    --home-action-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    --home-action-shadow-hover: 0 6px 14px rgba(0, 0, 0, 0.12);
+    --home-action-font-size: 1.05rem;
+    --home-action-mobile-font-size: 1.1rem;
+    --home-action-min-width: 220px;
+    --home-action-transition-time: 0.2s;
+    --home-action-background-color: white;
+    --home-action-text-color: var(--color-theme-blue);
+    --home-action-hover-background-color: var(--color-theme-blue);
+    --home-action-hover-text-color: white;
+    --home-action-hover-transform: translateY(-2px);
+
+    /* Variables para el botón base y el header responsive */
+    --button-base-display: inline-flex;
+    --button-base-align-items: center;
+    --button-base-justify-content: center;
+    --button-base-line-height: 1.2;
+    --button-base-max-width: 100%;
+    --button-base-text-align: center;
 }
 
 .button-source {
@@ -148,8 +174,102 @@
     border: var(--button-default-bordersize) solid;
 }
 
+/*
+    Estilo base de los botones generales.
+    Se usa para que los enlaces y botones sean claros, legibles y flexibles,
+    especialmente cuando el texto es largo en pantallas pequeñas.
+*/
 .button {
+    display: var(--button-base-display);
+    align-items: var(--button-base-align-items);
+    justify-content: var(--button-base-justify-content);
     text-decoration: none;
     font-weight: bold;
     border-radius: var(--button-default-borderradius);
+    line-height: var(--button-base-line-height);
+    max-width: var(--button-base-max-width);
+    text-align: var(--button-base-text-align);
+    white-space: normal;
 }
+
+/*
+    Contenedor de acciones del header.
+    En móvil ocupa todo el ancho para evitar que el botón se superponga,
+    y en escritorio vuelve a alinearse a la derecha.
+*/
+.header-actions {
+    width: 100%;
+}
+
+.header-actions .button {
+    width: 100%;
+    max-width: 100%;
+}
+
+@media (min-width: 768px) {
+    .header-actions {
+        width: auto;
+        justify-content: flex-end;
+    }
+
+    .header-actions .button {
+        width: auto;
+    }
+}
+
+/*
+    Nuevas clases para la zona de botones principales de la home.
+    Sirven para que los botones se vean grandes, claros y fáciles de tocar,
+    especialmente para personas mayores y para pantallas pequeñas.
+*/
+
+/* Contenedor de los botones principales de la home */
+.home-actions {
+    margin: 2rem 0 1rem;
+}
+
+/* Estilo base de cada botón grande de la home */
+.home-action-btn {
+    min-height: var(--home-action-min-height);
+    padding: var(--home-action-padding);
+    border-radius: var(--home-action-border-radius);
+    border: var(--home-action-border-size) solid var(--color-theme-blue);
+    background-color: var(--home-action-background-color);
+    color: var(--home-action-text-color);
+    font-weight: 700;
+    font-size: var(--home-action-font-size);
+    box-shadow: var(--home-action-shadow);
+    transition: transform var(--home-action-transition-time) ease, box-shadow var(--home-action-transition-time) ease, background-color var(--home-action-transition-time) ease, color var(--home-action-transition-time) ease;
+}
+
+/* Efecto al pasar el mouse o al enfocar el botón */
+.home-action-btn:hover,
+.home-action-btn:focus {
+    background-color: var(--home-action-hover-background-color);
+    color: var(--home-action-hover-text-color);
+    transform: var(--home-action-hover-transform);
+    box-shadow: var(--home-action-shadow-hover);
+}
+
+/* Ajuste para pantallas pequeñas (móviles) */
+@media (max-width: 767.98px) {
+    .home-actions {
+        flex-direction: column; /* uno debajo del otro */
+        align-items: stretch; /* ocupan todo el ancho */
+    }
+
+    .home-action-btn {
+        width: 100%; /* ocupa el ancho completo */
+        min-height: var(--home-action-mobile-min-height); /* un poco más alto en móvil */
+        font-size: var(--home-action-mobile-font-size); /* texto un poco más grande */
+    }
+}
+
+/* Ajuste para pantallas más grandes */
+@media (min-width: 768px) {
+    .home-action-btn {
+        min-width: var(--home-action-min-width); /* ancho mínimo para que se vean bien */
+    }
+}
+
+/* Siempre es recomendable usar "var" como buena practica profe, para facil modificacion de las cosas */
