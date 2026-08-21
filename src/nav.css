@@ -1,0 +1,38 @@
+:root {
+    --nav-input-bordersize: 2px;
+    --nav-input-padding: 5px;
+    --nav-input-bordercolor: rgb(235, 235, 235);
+    --nav-input-width: 50%;
+    --nav-input-height: 100%;
+    --nav-input-max-height: 100px;
+    --nav-input-max-width: 400px;
+
+    --nav-input-transition-bordercolor: rgb(65, 154, 255);
+    --nav-input-transition-bordersize: 2px;
+    --nav-input-transition-duration: .1s;
+    --nav-input-transition-style: ease-out
+}
+
+.nav-input {
+    width: var(--nav-input-width);
+    height: auto;
+    max-width: var(--nav-input-max-width);
+    max-height: var(--nav-input-max-height);
+
+    padding: var(--nav-input-padding);
+
+    text-align: center;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: var(--nav-input-bordersize) solid var(--nav-input-bordercolor);
+    transition: border var(--nav-input-transition-duration) var(--nav-input-transition-style);
+}
+
+.nav-input:hover {
+    border: var(--nav-input-transition-bordersize) solid var(--nav-input-transition-bordercolor);
+}
+
+.nav-input:focus {
+    outline: none;
+    border: var(--nav-input-transition-bordersize) solid var(--nav-input-transition-bordercolor)
+}

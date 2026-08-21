@@ -1,0 +1,35 @@
+:root{
+    --colortheme-white-main-background-color: rgb(243, 243, 243);
+    --default-frame-margin-bottom: 10px;
+    --default-frame-padding: 20px;
+
+    --frame-corner: 50px;
+    
+    --frame-relevant-padding: 30px;
+    --frame-relevant-colortheme-white-bg: white;
+    --frame-relevant-colortheme-white-bordercolor: rgb(177, 177, 177);
+    --frame-relevant-colortheme-white-bordersize: 3px;
+}
+
+.frame {
+    padding: var(--default-frame-padding);
+    margin-bottom: var(--default-frame-margin-bottom);
+    background-color: var(--colortheme-white-main-background-color);
+}
+
+.frame-relevant {
+    padding: var(--frame-relevant-padding);
+
+    background-color: var(--frame-relevant-colortheme-white-bg);
+    /*
+    border: var(--frame-relevant-colortheme-white-bordersize) solid var(--frame-relevant-colortheme-white-bordercolor);
+    */
+}
+
+.frame-with-corner {
+    border-radius: var(--frame-corner);
+}
+
+.frame-with-flex {
+    justify-content: center;
+}
