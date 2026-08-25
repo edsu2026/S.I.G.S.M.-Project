@@ -1,0 +1,7 @@
+.card-custom-bg {
+    background-image: url('assets/img/bg-encuestas.jpg');
+    background-position: center top;
+    background-size: cover;
+    font-weight: bold;
+    height: 200px;
+}

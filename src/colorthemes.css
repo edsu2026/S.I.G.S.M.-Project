@@ -1,0 +1,28 @@
+:root {
+    --color-lightgreen: rgb(124, 243, 108);
+    --color-yellow: #ffff61;
+    --color-darkred: rgb(187, 0, 0);
+    --color-red: red;
+    --color-lightred: rgb(255, 97, 97);
+    --color-purple: rgb(97, 0, 172);
+    --color-blue: rgb(12, 19, 122);
+    --color-white: rgb(255, 255, 255);
+    --color-lightgray: rgb(200, 200, 200);
+    --color-gray: rgb(100, 100, 100);
+    --color-darkgray: rgb(50, 50, 50);
+    --color-black: rgb(0, 0, 0);
+}
+
+.theme-purple {
+    background-color: var(--color-purple);
+}
+
+.theme-lightblue {
+    background-color: var(--color-blue);
+    color: var(--color-white);
+}
+
+.theme-darkblue {
+    background-color: rgb(0, 0, 50);
+    color: var(--color-white);
+}
