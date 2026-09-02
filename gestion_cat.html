@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="src/colorthemes.css">
+        <link rel="stylesheet" href="src/main.css">
+        <link rel="stylesheet" href="src/button.css">
+        <link rel="stylesheet" href="src/paddings.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    </head>
+    <body style="background-image: url('assets/img/index-bg.jpg'); background-size: cover; background-position: center;">
+        <div class="container d-flex flex-column min-vh-100">
+            <header class="row mini d-flex align-items-center justify-content-center theme-darkblue">
+                <div class="col-12 mini d-flex justify-content-center gap-3" style="color: white;">
+                    <span>
+                        <a href="#" class="button button-link">inicio</a>
+                    </span>
+                    <span>
+                        <a href="#" class="button button-link">documentos</a>
+                    </span>
+                    <span>
+                        <a href="#" class="button button-link">encuestas</a>
+                    </span>
+                    <span>
+                        <a href="#" class="button button-link">ayuda</a>
+                    </span>
+                </div>
+            </header>
+            <main class="row frame flex-grow-1">
+                <div class="col-8 mx-auto h-auto d-flex flex-column justify-content-center centered-vertical gap-3 p-2 rounded" style="background-color: rgba(0, 0, 0, 0.7); margin-top: 20px; margin-bottom: 20px;">
+                    <div class="w-auto h-auto d-flex flex-column align-items-center justify-content-center gap-2 p-1">
+                        <div class="w-100 d-flex flex-column align-items-center gap-3 p-4">
+                            <input id="inputNombreCat" type="text" class="form-control w-75" placeholder="Nombre" aria-label="Categoría">
+                            <button onclick="crearCategoria()" class="w-25 btn btn-primary">Crear categoria</button>
+                        </div>
+                        <div class="w-100 d-flex flex-column align-items-center gap-3 p-4">
+                            <input id="inputIdCatDel" type="text" class="form-control w-75" placeholder="ID de la categoría" aria-label="Categoría">
+                            <button onclick="eliminarCategoria()" class="w-25 btn btn-danger">Eliminar categoria</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <footer class="row theme-darkblue justify-content-center mini">
+                <!-- Añadido align-items-center y corregido el ancho de columnas si usas d-flex -->
+                <div class="col-12 d-flex justify-content-center gap-4 align-items-center">
+                    <!-- Eliminados los col-12/col-md-3 para que Flexbox maneje el espacio de forma fluida -->
+                    <section>
+                        <p class="mb-0">E.D.S.U.</p> <!-- mb-0 quita el margen del párrafo -->
+                    </section>
+                    <section>
+                        <p class="mb-0">Hospital de Clínicas</p> <!-- mb-0 quita el margen del párrafo -->
+                    </section>
+                </div>
+                <div class="col-12 d-flex justify-content-center">
+                    <p class="mb-0" style="color: rgb(212, 188, 255)">© 2026 Todos los derechos reservados</p> <!-- mb-0 quita el margen del párrafo -->
+                </div>
+            </footer>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    </body>
+</html>
