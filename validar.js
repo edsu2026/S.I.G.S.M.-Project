@@ -11,13 +11,13 @@ function validarInicioSolicitud() {
     let password = inputPassword.value;
 
     if (!patronEmail.test(email)) {
-        alertDiv.textContent = "Email inadecuado";
+        alertDiv.textContent = "Email inadecuado. Su email debe de tener el siguiente formato: ejemplo@dominio.com";
         alertDiv.classList.remove("d-none");
         return; // Detiene la función si el email no es válido
     }
 
     if (!patronPassword.test(password)) {
-        alertDiv.textContent = "Contraseña inadecuada";
+        alertDiv.textContent = "Contraseña inadecuada. Debe contener al menos 8 caracteres, una mayúscula, una minúscula y un número";
         alertDiv.classList.remove("d-none");
         return; // Detiene la función si la contraseña no es válida
     }
