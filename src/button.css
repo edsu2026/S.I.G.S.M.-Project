@@ -26,3 +26,19 @@
 .button {
     text-decoration: none;
 }
+
+.button-image-transparent {
+    color: var(--color-white);
+    font-weight: 600;
+    font-size: 2rem;
+    opacity: 0.6; /* Hace el elemento y su imagen semi-transparentes */
+    border: 2px solid transparent; /* Evita saltos de maquetación al aparecer el borde */
+    transition: all 0.3s ease; /* Suaviza el cambio de tamaño, opacidad y borde */
+    display: block; /* Asegura que la transformación funcione correctamente */
+}
+
+.button-image-transparent:hover {
+    opacity: 1; /* Hace el elemento y su imagen completamente visibles al pasar el ratón */
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño del elemento */
+    border: 2px solid var(--color-white); /* Añade un borde blanco al pasar el ratón */
+}
