@@ -1,7 +1,6 @@
 :root {
     --button-default-padding: 5px;
     --button-default-bordersize: 2px;
-    --button-default-borderradius: 10px;
 
     --button-transition-default-style: ease-out;
     --button-transition-default-time: .2s;
@@ -25,6 +24,48 @@
 
 .button {
     text-decoration: none;
+}
+
+.button-panel {
+    padding: var(--button-default-padding);
+    border: var(--button-default-bordersize) solid rgba(var(--color-white));
+    text-decoration: none;
+    text-align: center;
+    font-weight: 600;
+    transition:
+        border var(--button-transition-default-time) var(--button-transition-default-style),
+        background-color var(--button-transition-default-time) var(--button-transition-default-style);
+}
+
+.button-panel:hover {
+    border: var(--button-default-bordersize) solid rgba(var(--color-white), 0);
+    background-color: var(--color-white);
+    color: black
+}
+
+.button-dropdown {
+    padding: var(--button-default-padding);
+    border: var(--button-default-bordersize) solid rgba(255, 255, 255, 0);
+    font-weight: 600;
+    transition:
+        border var(--button-transition-default-time) var(--button-transition-default-style),
+        background-color var(--button-transition-default-time) var(--button-transition-default-style);
+}
+
+.button-dropdown:hover {
+    border: var(--button-default-bordersize) solid rgba(255, 255, 255, 1);
+    background-color: var(--color-white);
+    color: black;
+}
+
+.button-theme-blue {
+    background-color: var(--color-blue);
+    color: var(--color-white);
+}
+
+.button-theme-red {
+    background-color: var(--color-red);
+    color: var(--color-white);
 }
 
 .button-image-transparent {
