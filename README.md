@@ -1,5 +1,6 @@
 # 🏥 S.I.G.S.M. - Sistema de Información de Gestión de Servicios Médicos
-# EDSU - Equipo de Desarrollo de Software del Uruguay
+> **EDSU** - Equipo de Desarrollo de Software del Uruguay
+
                            #############################################%
                            #############################################%
                            #############################################%
