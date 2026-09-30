@@ -71,16 +71,15 @@ function crearDocumento() {
 }
 
 function actualizarDocumento() {
-    let inputIdDoc = document.getElementById("inputIdDocAct").value.trim();
-    //let inputFile = document.getElementById("inputFileAct").value.trim();
+    // let inputFile = document.getElementById("inputFileAct").value;
+    let inputNombre = document.getElementById("inputNombreAct").value ?? null;
 
     const patronNombre = /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\s\-_.,?!()]{1,64}$/;
-    const patronID = /^[1-9]\d*$/;
 
-    if (!patronID.test(inputIdDoc)) {
-        alert("Por favor, ingresa un ID de documento válido");
-        return;
-    }
+    if (!patronNombre.test(inputNombre) && inputNombre != null)
+    {
+        alert("Imposible tomar el nombre. No cumple con los parámetros");
+    };
 
     alert("¡Datos válidos! Procesando actualización de documento...");
 }

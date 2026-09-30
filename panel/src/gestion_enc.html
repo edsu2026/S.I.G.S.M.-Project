@@ -14,27 +14,27 @@
             <header class="row mini d-flex align-items-center justify-content-center theme-darkblue">
                 <div class="col-12 mini d-flex justify-content-center gap-3" style="color: white;">
                     <span>
-                        <a href="adminpanel.html" class="button button-link">Regreso al Panel</a>
+                        <a href="<?= $dashboard ?>/panel/adminpanel.php" class="button button-link">Regreso al Panel</a>
                     </span>
                 </div>
             </header>
             <main class="row frame flex-grow-1">
-                <div class="col-8 mx-auto h-auto d-flex flex-column justify-content-center centered-vertical gap-3 p-2 rounded" style="background-color: rgba(0, 0, 0, 0.7); margin-top: 20px; margin-bottom: 20px;">
+                <div class="col-8 mx-auto h-auto d-flex flex-column justify-content-center centered-vertical gap-3 p-5 rounded" style="background-color: rgba(0, 0, 0, 0.7); margin-top: 20px; margin-bottom: 20px;">
                     <div class="w-auto h-auto d-flex flex-column align-items-center justify-content-center gap-3 p-2">
                         <div class="w-100 d-flex flex-column align-items-center gap-3 p-4">
-                            <input id="inputCatId" type="text" class="form-control w-75" placeholder="Categoría (servicio)" aria-label="Categoría">
-                            <input id="inputNombreDoc" type="text" class="form-control w-75" placeholder="Nombre" aria-label="Nombre">
-                            <input id="inputFile" type="file" class="form-control w-75" placeholder="Inserte documento" aria-label="Doc.">
-                            <button onclick="crearDocumento()" class="w-25 btn btn-primary">Crear documento</button>
+                            <input id="inputIdCat" type="text" class="form-control w-75" placeholder="Categoría (ID)" aria-label="Categoría">
+                            <input id="inputNombreEnc" type="text" class="form-control w-75" placeholder="Nombre" aria-label="Nombre">
+                            <input id="inputURL" type="text" class="form-control w-75" placeholder="Inserte enlace" aria-label="Doc.">
+                            <button class="w-25 btn btn-primary" onclick="crearEncuesta()">Crear encuesta</button>
                         </div>
                         <div class="w-100 d-flex flex-column align-items-center gap-3 p-4">
-                            <input id="inputIdDocAct" type="text" class="form-control w-75" placeholder="ID del documento" aria-label="Documento">
-                            <input id="inputFileAct" type="file" class="form-control w-75" placeholder="Inserte documento" aria-label="Doc.">
-                            <button onclick="actualizarDocumento()" class="w-25 btn btn-warning">Actualizar</button>
+                            <input id="inputIdEncAct" type="text" class="form-control w-75" placeholder="ID de la encuesta" aria-label="Encuesta">
+                            <input id="inputLinkAct" type="text" class="form-control w-75" placeholder="Inserte enlace" aria-label="link">
+                            <button class="w-25 btn btn-warning" onclick="actualizarEncuesta()">Actualizar</button>
                         </div>
                         <div class="w-100 d-flex flex-column align-items-center gap-3 p-4">
-                            <input id="inputIdDocDel" type="text" class="form-control w-75" placeholder="ID del documento" aria-label="Documento">
-                            <button onclick="eliminarDocumento()" class="w-25 btn btn-danger">Eliminar documento</button>
+                            <input id="inputIdEncDel" type="text" class="form-control w-75" placeholder="ID de la encuesta" aria-label="Encuesta">
+                            <button class="w-25 btn btn-danger" onclick="eliminarEncuesta()">Eliminar encuesta</button>
                         </div>
                     </div>
                 </div>
