@@ -1,17 +1,20 @@
 <?php
-require "../conexion.php";
+require "../../php/conexion.php";
+$uploads = "../../uploads/documentos/"; // Carpeta donde se guardarán los documentos subidos
 
 try {
     if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_FILES['inputFile'])) {
-        
-        if (!isset($_POST['inputCatId']) || empty(trim($_POST['inputCatId']))) {
+        if (empty(trim($_POST['inputCatId']))) {
             die("Error: El ID de la categoría no puede estar vacío.");
         }
-        
-        $nombre_documento = (!isset($_POST['inputNombre']) || empty(trim($_POST['inputNombre']))) 
-            ? "Documento sin título" 
-            : trim($_POST['inputNombre']);
 
+        $extensionArchivo = pathinfo($_FILES['inputFile']['name'], PATHINFO_EXTENSION);
+        if ($extensionArchivo !== 'pdf') {
+            die("Error: Solo se permiten archivos PDF.");
+        }
+        
+        //Inicialización de la consulta SQL
+        $nombre_documento = (isset($_POST['inputNombre']) ? trim($_POST['inputNombre']) : 'Documento sin nombre');
         $id_categoria = $_POST['inputCatId'];
 
         $sql = "INSERT INTO documento (id_categoria, nombre_documento) VALUES (:id_categoria, :nombre_documento)";
@@ -19,24 +22,18 @@ try {
         $stmt->bindParam(':id_categoria', $id_categoria, PDO::PARAM_INT);
         $stmt->bindParam(':nombre_documento', $nombre_documento, PDO::PARAM_STR);
         $stmt->execute();
-        
-        $id_documento_creado = $conexion->lastInsertId();
 
-        $nombre_original = basename($_FILES['inputFile']['name']);
-        $extension = pathinfo($nombre_original, PATHINFO_EXTENSION);
-        
-        $nuevo_nombre = $id_documento_creado . "." . $extension;
+        //Guardar el documento
+        $idNuevoDocumento = $conexion->lastInsertId();
+        $nombreArchivo = $idNuevoDocumento . '.pdf';
+        $rutaArchivo = $uploads . $nombreArchivo;
 
-        $folder = "../../uploads/documentos/";
-        $destino = $folder . $nuevo_nombre;
-        $archivo_temporal = $_FILES['inputFile']['tmp_name'];
-    
-        if (move_uploaded_file($archivo_temporal, $destino)) {
-            echo "El archivo se ha guardado correctamente en el servidor como: " . $nuevo_nombre . " y se registró en la base de datos con el ID: " . $id_documento_creado;
-        } else {
-            echo "Error: No se pudo mover el archivo físico al directorio de destino. Verifica los permisos de la carpeta.";
+        $archivoSubido = move_uploaded_file($_FILES['inputFile']['tmp_name'], $rutaArchivo);
+        if (!$archivoSubido) {
+            die("Error: No se pudo subir el archivo.");
         }
-        header('Location: ../../panel/adminpanel.php');
+
+        header('Location: ../../dashboard/adminpanel.php');
     } else {
         echo "Error: No se envió el formulario de forma correcta o falta el archivo.";
     }

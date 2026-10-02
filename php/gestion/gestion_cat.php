@@ -11,14 +11,8 @@
             $action = $_POST['action'];
 
             if ($action == "actCat") {
-                if (empty($_POST['inputNombre'])) {
-                    die("El nombre no puede ser nulo");
-                }
+                $nuevoNombre = ($_POST['inputNombre']) ?? die("El nombre no puede ser nulo");
 
-                if ($nuevoNombre == NULL) {
-                    die("Nombre no puede ser NULL");
-                }   
-                $nuevoNombre = $_POST['inputNombre'];
                 $sqlActCat = "UPDATE categoria SET nombre_categoria = :nuevo_nombre WHERE id_categoria = :id_categoria";
                 $stmt = $conexion->prepare($sqlActCat);
                 $stmt->bindParam(':nuevo_nombre', $nuevoNombre, PDO::PARAM_STR);
@@ -34,7 +28,7 @@
             }
 
             echo "Categoria actualizada";
-            header('Location: ../../panel/adminpanel.php');
+            header('Location: ../../dashboard/adminpanel.php');
         } catch (\Throwable $th) {
             throw $th;
         }

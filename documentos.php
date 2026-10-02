@@ -6,7 +6,7 @@
     $categoriaAgrupadas = [];
         foreach ($documentosResult as $doc) {
                 $catSegura = htmlspecialchars($doc['id_categoria'], ENT_QUOTES, 'UTF-8');
-                $nombSeguro = htmlspecialchars($doc['id_documento'], ENT_QUOTES, 'UTF-8');
+                $nombSeguro = htmlspecialchars($doc['nombre_documento'], ENT_QUOTES, 'UTF-8');
                 $rutaSegura = htmlspecialchars($doc['ruta_documento'], ENT_QUOTES, 'UTF-8');
 
                 $categoriaAgrupadas[$catSegura][] = [
@@ -41,7 +41,7 @@
     <link rel="stylesheet" href="styles/button.css">
     <link rel="stylesheet" href="src/nav.css">
     <link rel="stylesheet" href="src/main.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"> 
 </head>
 <body style="background-image: url('assets/img/index-bg.jpg'); background-size: cover; background-position: center;">
     <div class="container d-flex flex-column min-vh-100">
@@ -60,109 +60,56 @@
         </header>
         <main class="row d-flex flex-column" style="margin-bottom: 20px; margin-top: 20px;">
             <div class="col p-4 rounded" style="background-color: rgba(0, 0, 0, 0.7);"> <!--Documentos-->
-                <nav class="col d-flex" mb-3>
-                    <div class="col d-flex align-items-center justify-content-end"> <!--Parte derecha del header-->
-                    <button class="dropdown-toggle" data-bs-toggle="dropdown" style="height: auto;">Filtros</button>
+                <nav class="col d-flex mb-3 justify-content-end">
+                    <div class="dropdown">
+                        <button class="dropdown-toggle" data-bs-toggle="dropdown" style="height: auto;">Filtros</button>
                         <ul class="dropdown-menu">
                             <li><button class="dropdown-item" type="button" id="ordenFecha">FECHA</button></li>
                             <li><button class="dropdown-item" type="button" id="ordenAZ">A-Z</button></li>
                         </ul>
+                 </div>
              </nav>
-                <div class="accordion" id="Accordion">
-                    <?php foreach($categoriaResult as $categoria): ?>
-                        <?php $idUnico = md5($categoria);?>
-                        <div class="accordion-item">
-                          <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-<?php echo $idUnico; ?>" aria expanded="false" aria-controls="collapse-<?php echo $idUnico; ?>" >
-                                <b><?php echo $categoria; ?></b>
-                            </button>    
-                        </h2>  
-                        <div id="collapse<?php echo $idUnico; ?>" class="accordion-collapse collapse" data-bs-parent="#Accordion">
-                            <div class="accordion-body">
-                                <ul class="list-group list-group-flush">
-                                    <?php foreach($documentos as $doc):?> <!--Entra al cuerpo del panel, y abre una lista de bootstrap, a su vez inicia otro bucle para recorrer todos los documentos que pertenecen a esta categoria especifica-->
-                                        <li class="list-group-item">
-                                            <a href="<?php echo $doc ['ruta']; ?>" class="button button-source">
-                                                <?php echo $doc['nombre']; ?>
-                                           </a>
-                                       </li>   
-                                       <?php endforeach; ?>
-                                    </ul>       
-                         </div>
-                    </div>        
-                </div>  
-             <?php endforeach; ?>
-            </div>   
-                       <!-- 
-                            Esta raro esto - Mateo ducasse :
-                            <button class="dropdown-toggle" data-bs-toggle="dropdown" style="height: auto;">Filtros</button>
-                        <ul class="dropdown-menu">
-                            <li><button class="dropdown-item" href="#">FECHA</button></li>
-                            <li><button class="dropdown-item" href="#">A-Z</button></li>
-                        </ul>
-                        <input class="nav-input" type="text" placeholder="Ingrese nombre de documento">
-                        -->
-                    </div>
-                </nav>
                 <!-- Aca va el codigo de PHP para conectarlo y Reemplazar la lista de HTML ESTATICO a PHP Backend -->
-                <div class="accordion" id="Accordion">
-    <?php foreach ($categoriaAgrupadas as $categoria => $documentos): ?>
+             <div class="accordion" id="Accordion">
+                     <?php foreach ($categoriaAgrupadas as $categoria => $documentos): ?>
+                     <?php $idUnico = md5($categoria); ?> 
 
-        <?php
-        $idUnico = md5($categoria);
-        ?>
+                 <div class="accordion-item categoria-item" data-categoria="<?php echo mb_strtolower($categoria, 'UTF-8'); ?>">
+                     <h2 class="accordion-header">
+                         <button 
+                             class="accordion-button collapsed" 
+                             type="button" 
+                             data-bs-toggle="collapse" 
+                             data-bs-target="#collapse-<?php echo $idUnico; ?>" 
+                             aria-expanded="false" 
+                             aria-controls="collapse-<?php echo $idUnico; ?>"
+                         >
+                             <b><?php echo $categoria; ?></b>       
+                         </button>
+                     </h2>
+                     <div id="collapse-<?php echo $idUnico; ?>" class="accordion-collapse collapse" data-bs-parent="#Accordion">
+                         <div class="accordion-body">
+                                <ul class="list-group list-group-flush">
+                                  <?php foreach ($documentos as $documento): ?>
 
-        <div class="accordion-item categoria-item" data-categoria="<?php echo mb_strtolower($categoria, 'UTF-8'); ?>">
+                                    <li class="list-group-item documento-item" data-nombre="<?php echo mb_strtolower($documento['nombre'], 'UTF-8'); ?>">
+                                         <a href="<?php echo $documento['ruta']; ?>" class="button button-source">
+                                            <?php echo $documento['nombre']; ?>
+                                         </a>
+                                  </li>
 
-            <h2 class="accordion-header">
-                <button 
-                    class="accordion-button collapsed" 
-                    type="button" 
-                    data-bs-toggle="collapse" 
-                    data-bs-target="#collapse-<?php echo $idUnico; ?>" 
-                    aria-expanded="false" 
-                    aria-controls="collapse-<?php echo $idUnico; ?>"
-                >
-                    <b><?php echo $categoria; ?></b>
-                </button>
-            </h2>
+                                   <?php endforeach; ?>
+                              </ul>
+                         </div>
+                    </div>
+          </div>
+        <?php endforeach; ?>
+  </div>
 
-            <div 
-                id="collapse-<?php echo $idUnico; ?>" 
-                class="accordion-collapse collapse" 
-                data-bs-parent="#Accordion"
-            >
-                <div class="accordion-body">
-
-                    <ul class="list-group list-group-flush">
-
-                        <?php foreach ($documentos as $documento): ?>
-
-                            <li class="list-group-item documento-item" data-nombre="<?php echo mb_strtolower($documento['nombre'], 'UTF-8'); ?>">
-                                <a 
-                                    href="<?php echo $documento['ruta']; ?>"
-                                    <!-- href="<?php  // echo $documento['nombre']; ?>" -->
-                                    class="button button-source"
-                                >
-                                    <?php echo $documento['nombre']; ?>
-                                </a>
-                            </li>
-
-                        <?php endforeach; ?>
-
-                    </ul>
-
-                </div>
-
-            </div>
-
-        </div>
-    <?php endforeach; ?>
-
-</div>
-
-    <div id="mensajeSinResultados" class="text-white" text-center p-4 d-none>
+    <div id="mensajeSinResultados" class="text-white text-center p-4 d-none">
         <p>No se encontraron documentos</p>
+    </div>
+
     </div>
         </main>
         <footer class="row theme-darkblue justify-content-center mini mt-auto">
@@ -179,8 +126,8 @@
                 <div class="col-12 d-flex justify-content-center">
                     <p class="mb-0" style="color: rgb(212, 188, 255)">© 2026 Todos los derechos reservados</p> <!-- mb-0 quita el margen del párrafo -->
                 </div>
-        </footer>
-    </div>   
+         </div>
+     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -106,8 +106,8 @@
                                     $stmtDocumentos = $conexion->prepare($sqlDocumentos);
                                     $stmtDocumentos->bindParam(':id_categoria', $categoria['id_categoria'], PDO::PARAM_INT);
                                     $stmtDocumentos->execute();
-                                    $documentosResult = $stmtDocumentos->fetchall();
-                                    if(empty($documentosResult)): ?>
+                                    $documentosResult = $stmtDocumentos->fetchAll();
+                                    if ( empty($documentosResult)): ?>
                                         <tr>
                                             <td colspan="2" class="text-center">No hay documentos en esta categoría</td>
                                         </tr>

@@ -51,6 +51,7 @@
                     <form action="<?= $dashboard ?>/php/gestion/gestion_doc.php" method="POST" enctype="multipart/form-data" class="w-auto h-auto d-flex flex-column align-items-center justify-content-center gap-3 p-2 mt-2">
                         <input id="inputCatId" name="inputDocId" type="hidden" value=<?= $documento['id_documento'] ?>>
                         <input id="inputNombre" name="inputNombre" type="text" class="form-control w-100" placeholder="Ingrese nuevo nombre" aria-label="doc-nombre">
+                        <input id="inputFile" name="inputFile" type="file" class="form-control w-100" aria-label="doc-file">
                         <button type="submit" name="action" value="actDoc" class="w-100 btn btn-primary">Actualizar</button>
                         <button type="submit" name="action" value="bajaDoc" class="w-100 btn btn-primary">Eliminar</button>
                     </form>

@@ -7,9 +7,11 @@
                 $stmt = $conexion->prepare($sqlCreateCat);
                 $stmt->bindParam(':nombre_categoria', $_POST['newCatName'], PDO::PARAM_STR);
                 $stmt->execute();
+            } else {
+                die("El nombre de la categoría no puede estar vacío");
             }
         }
-        header('Location: ../../panel/adminpanel.php');
+        header('Location: ../../dashboard/adminpanel.php');
     } catch (\Throwable $th) {
         throw $th;
     }

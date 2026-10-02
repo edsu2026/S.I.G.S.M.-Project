@@ -24,17 +24,17 @@ CREATE TABLE IF NOT EXISTS administrativo(
 
 CREATE TABLE IF NOT EXISTS categoria(
 	id_categoria INT AUTO_INCREMENT NOT NULL,
-    nombre_categoria CHAR(128) NOT NULL,
-    activo BOOLEAN NOT NULL,
+    nombre_categoria CHAR(128) NOT NULL UNIQUE,
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY(id_categoria)
 );
 
 CREATE TABLE IF NOT EXISTS documento(
 	id_documento INT AUTO_INCREMENT NOT NULL,
     id_categoria INT NOT NULL,
-    nombre_documento CHAR(32) NOT NULL,
+    nombre_documento CHAR(32) NOT NULL UNIQUE,
     fecha_creación_doc DATE NOT NULL,
-    activo_doc BOOLEAN NOT NULL,
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY(id_documento),
     FOREIGN KEY(id_categoria) REFERENCES categoria(id_categoria)
 );
@@ -42,10 +42,10 @@ CREATE TABLE IF NOT EXISTS documento(
 CREATE TABLE IF NOT EXISTS encuesta(
 	id_encuesta INT AUTO_INCREMENT NOT NULL,
     id_categoria INT NOT NULL,
-    nombre_encuesta CHAR(32) NOT NULL,
+    nombre_encuesta CHAR(32) NOT NULL UNIQUE,
 	enlace BLOB NOT NULL,
     fecha_creación_enc DATE NOT NULL,
-    activo_enc BOOLEAN NOT NULL,
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY(id_encuesta),
     FOREIGN KEY(id_categoria) REFERENCES categoria(id_categoria)
 );
