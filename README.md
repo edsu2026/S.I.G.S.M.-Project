@@ -39,6 +39,7 @@
 - [💡 Acerca del Proyecto](#-acerca-del-proyecto)
 - [👥 Equipo de Desarrollo (EDSU)](#-equipo-de-desarrollo-edsu)
 - [🚀 Instalacion y Despliegue](#-instalacion-y-despliegue)
+- [🐧 Sistemas Operativos y Seguridad (ASO)](#-sistemas-operativos-y-seguridad-aso)
 
 ---
 ## 💡 Acerca del Proyecto 
@@ -52,6 +53,37 @@
 | **Valentin Correa** | Admin. de Base de Datos / Dev | RF/RNF, Modelado Entidad-Relación, Diagramas de Casos de Uso UML, Consultas MySQL |
 | **Marcos Salas** | Project Manager / Documentación | Documentacion, Diagrama de Gantt, Auditoría de Proyecto |
 ---
+## 🐧 Sistemas Operativos y Seguridad (ASO)
+La infraestructura del servidor cuenta con seguridad bastante pulida.
+
+### 1. Configuración de Red
+- **Adaptador Puente (Bridged):** Esto solo lo usamos nosotros para trabajar con SSH del PC Host a la VM.
+- **IP Estática permanente:** Configurada en `/etc/netplan/00-installer-config.yaml` (`192.168.1.50/24`).
+
+### 2. Cortafuegos (UFW)
+- Política por defecto: `default deny incoming` (Bloquear todo el tráfico entrante no autorizado).
+- Puertos habilitados:
+  - `22022/tcp` — Acceso remoto seguro SSH (Se utiliza un puerto personalizado configurable mediante un script, deshabilitando el puerto 22 (predeterminado) para                    reducir la exposición ante escaneos y accesos automatizados.)
+  - `80/tcp` — Protocolo Web HTTP
+  - `443/tcp` — Protocolo Web Seguro HTTPS
+
+### 3. Hardening SSH
+- Puerto de escucha modificado de 22 al **`22022`**(Se puede moficiar cuando quieran).
+- Acceso directo de `root` deshabilitado (`PermitRootLogin no`).
+- Lista blanca de usuarios autorizados (`AllowUsers edsu`).
+- Política de reintentos restringida (`MaxAuthTries 3`, `LoginGraceTime 30`).
+  <!-- MaxAuthTries3:
+                      - Maximo de 3 intentos de Autenticacion
+       LoginGraceTime 30:
+                      - da 30 segundos para completar el inicio de sesión.  
+   -->
+
+### 4. Permisos de Archivos y Directorios
+- Directorio de la aplicación web `/var/www/html/sigsm` configurado con permiso  **`770`** (`drwxrwx---`).
+- Propietario: `www-data` | Grupo: `SIGSM-administrativos`.
+- Impide el acceso no autorizado desde la consola local a datos médicos sensibles.
+---
+
 ## 🚀 Instalacion y Despliegue
 Para desarrollar, testear o simplemente deplegar la aplicacion de forma local (En su propia PC/Servidor)
 <details> <!-- Crea el contenedor desplegable -->
