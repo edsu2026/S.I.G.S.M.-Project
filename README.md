@@ -7,7 +7,7 @@
 <div align="center">
     
 # S.I.G.S.M.
-### Sistema de Información de Gestión de Servicios Médicos
+### Sistema informatico de Gestión de Servicios Médicos
 
 </div>
 
