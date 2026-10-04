@@ -69,15 +69,21 @@ La infraestructura del servidor cuenta con seguridad bastante pulida.
   - `443/tcp` — Protocolo Web Seguro HTTPS
 
 ### 3. Hardening SSH
-- Puerto de escucha modificado de 22 al **`22022`**(Se puede moficiar cuando quieran).
+- Puerto de escucha modificado de 22 al **`22022`** (Se puede modificar cuando quieran).
 - Acceso directo de `root` deshabilitado (`PermitRootLogin no`).
 - Lista blanca de usuarios autorizados (`AllowUsers edsu`).
 - Política de reintentos restringida (`MaxAuthTries 3`, `LoginGraceTime 30`).
-  <!-- MaxAuthTries3:
-                      - Maximo de 3 intentos de Autenticacion
+  <!-- MaxAuthTries 3:
+                      - Máximo de 3 intentos de autenticación.
        LoginGraceTime 30:
-                      - da 30 segundos para completar el inicio de sesión.  
+                      - Da 30 segundos para completar el inicio de sesión.
    -->
+- **Validación de la configuración:** antes de reiniciar el servicio SSH, se comprueba la sintaxis de `sshd_config` mediante `sshd -t`.
+- **Respaldo de la configuración:** antes de realizar cambios, se genera una copia de seguridad de `/etc/ssh/sshd_config`.
+- **Rollback automático:** si la validación de `sshd_config` falla, el script restaura automáticamente la configuración original.
+- **Reinicio automático del servicio:** si la configuración es válida, el servicio SSH se reinicia aplicando los nuevos parámetros.
+- **Puerto configurable:** el puerto SSH puede modificarse desde el script.
+- **Usuarios autorizados configurables:** la lista de usuarios permitidos mediante `AllowUsers` puede definirse desde el script.
 
 ### 4. Permisos de Archivos y Directorios
 - Directorio de la aplicación web `/var/www/html/sigsm` configurado con permiso  **`770`** (`drwxrwx---`).
