@@ -4,10 +4,10 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Iniciar sesión</title>
-        <link rel="stylesheet" href="src/main.css">
-        <link rel="stylesheet" href="src/colorthemes.css">
-        <link rel="stylesheet" href="src/button.css">
-        <link rel="stylesheet" href="src/paddings.css">
+        <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="styles/colorthemes.css">
+        <link rel="stylesheet" href="styles/button.css">
+        <link rel="stylesheet" href="styles/paddings.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     </head>
     <body style="background-image: url('assets/img/index-bg.jpg');">
@@ -18,10 +18,10 @@
                         <a href="index.html" class="button button-link">inicio</a>
                     </span>
                     <span>
-                        <a href="documentos.html" class="button button-link">documentos</a>
+                        <a href="documentos.php" class="button button-link">documentos</a>
                     </span>
                     <span>
-                        <a href="encuestas.html" class="button button-link">encuestas</a>
+                        <a href="encuestas.php" class="button button-link">encuestas</a>
                     </span>
                     <span>
                         <a href="preguntas.html" class="button button-link">ayuda</a>
