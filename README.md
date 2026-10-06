@@ -170,8 +170,6 @@ sudo ./scriptEDSU_V(Beta).sh
 ### Banner de la Empresa en Consola
 El script incluye tambien un banner/logo en arte ASCII de **EDSU** solamente utilizando nuestro logo que es una **E** con colores cian.
 
-Menu Interactivo:
-
 ```text
 =============================================================
    S.I.G.S.M. - CONSOLA DE ADMINISTRACIÓN DEL SERVIDOR
@@ -205,4 +203,63 @@ Menu Interactivo:
 
 ---
 <!-- Si estas leyendo esto, te recuerdo que faltan cosas aun y que por eso no se explico cada opcion, ni se detallo a fondo, aun faltan varias cositas que voy a ir agregando con el tiempo porq me toma tiempo documentar correctamente. -->
+
+<details>
+    <summary>
+        <b>¿Como funciona el Menu de la Shell?(hace click👆</b>)
+    </summary>
+<br> <!-- Este es un Salto de linea  -->
+
+(Antes de Iniciar las opciones se CREA Automaticamente 2 grupos que son de los 2 roles correspondientes que usamos "admin" y "administrativos")
+
+Opciones del Menu:
+
+## -- Usuarios y Grupos -- 
+```text
+1) Crear un Nuevo Usuario (Asociación automática a Grupo)
+```
+Esta opcion primero te va a pedir ingresar unos datos NECESARIOS y OBLIGATORIOS:
+- username: Nombre de Usuario (Identificador) que usaras para logearte al sistema
+- rol: Organizativo (administradores/administrativos)
+- nombre: Primer nombre de la persona
+- apellido: Primer Apellido de la persona
+
+Valida campos vacios, tambien va a buscar que el username ingresado que NO ESTE REGISTRADO en el sistema, si esta registrado en el sistema actual entonces te va a devolver un error la terminal.
+
+Ademas esta opcion va a Evaluar el rol que eligiste para ese Usuario.
+Si el **rol** elegido es ```admin``` entonces lo manda a el grupo ```SIGSM-administradores``` en cambio si el **rol** es ```administrativo``` lo manda al grupo de ```SIGSM-administrativos```.
+
+Tambien le genera un Home a ese usuario(serviria para que tenga su espacio/cuenta cada usuario que ingrese sea Administrador o Administrativo). 
+ej: ```"/home/mateo"```
+
+```text
+2) Eliminar un Usuario (Limpieza total de HOME)
+```
+Esta opcion permite eliminar un usuario del sistema junto con TODOS sus archivos y configuraciones almacenadas en su home (/home/user)
+
+- Debes indicar obligatoriamente el nombre de usuario que quieres eliminar. Si no se proporciona ningun usuario, la operacion devolvera error.
+
+- El sistema verificara que el usuario indicado exista.
+
+- Si el usuario no existe, se mostrara un mensaje de error y te volvera al Menu con todas las opciones nuevamente.
+
+- Si el usuario existe, sera eliminado tanto el usuario como su directorio personal (/home/user), incluyendo archivos, configuraciones y carpetas que contenga este.
+
+> **⚠️ Advertencia:** Esta opcion es DESTRUCTIVA. CUIDADO CON SU USO, ya que justamente se pierde toda la home (carpeta personal) de ese usuario, por eso es importante tener en cuenta el USO CUIDADOSO de esta opcion.
+
+```text
+3) Listar Usuarios del Sistema S.I.G.S.M.
+```
+Esta opcion muestra en pantalla todas las cuentas existentes en el servidor. Posteriormente, utiliza el prefijo ```SIGSM-``` para filtrar y aislar unicamente las cuentas pertenecientes al sistema.
+
+Para cada usuario encontrado, se obtiene y muestra la siguiente informacion:
+- Nombre de usuario: Gracias a que busca en el servidor con el prefijo ```SIGSM-``` para aislar bien los nombres del sistema obtenemos los nombres de usuarios.
+
+- rol: Gracias a el campo de metadatos donde se guarda "SIGSM-rol - Nombre Apellido" en esto caso mostraria en pantalla "rol - nombre". ej: "admin - mateo".
+
+```text
+4) Crear un Grupo Personalizado
+```
+
+</details>
 
