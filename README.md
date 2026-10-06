@@ -42,7 +42,7 @@
 - [🚀 Instalacion y Despliegue](#-instalacion-y-despliegue)
 - [🐧 Sistemas Operativos y Seguridad (ASO)](#-sistemas-operativos-y-seguridad-aso)
 - [👥 Desarrollo Web & Experiencia de Usuario](#-desarrollo-web--experiencia-de-usuario)
-- [💻 Uso de la Consola de Operador (script)](#-uso-de-la-consola-de-operador)
+- [</> Uso de la Consola de Operador (script)](#-uso-de-la-consola-de-operador-script)
 
 ---
 ## 💡 Acerca del Proyecto 
@@ -151,7 +151,7 @@ Abre el **XAMPP CONTROL PANEL** e inicia los servicios:
 
 ---  
 
-## 💻 Uso de la Consola de Operador (script)
+## </> Uso de la Consola de Operador (script)
 
 La gestion se realiza mediante el script interactivo que desarrollamos:
 `scriptEDSU_V(Beta).sh`.
