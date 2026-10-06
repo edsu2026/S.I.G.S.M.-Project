@@ -170,6 +170,8 @@ sudo ./scriptEDSU_V(Beta).sh
 ### Banner de la Empresa en Consola
 El script incluye tambien un banner/logo en arte ASCII de **EDSU** solamente utilizando nuestro logo que es una **E** con colores cian.
 
+Menu Interactivo:
+
 ```text
 =============================================================
    S.I.G.S.M. - CONSOLA DE ADMINISTRACIÓN DEL SERVIDOR
