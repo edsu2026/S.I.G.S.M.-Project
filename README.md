@@ -260,6 +260,21 @@ Para cada usuario encontrado, se obtiene y muestra la siguiente informacion:
 ```text
 4) Crear un Grupo Personalizado
 ```
+Esta opcion permite crear un nuevo grupo en el servidor. Para hacerlo, se debe ingresar el nombre del grupo que desea crear.
+
+El sistema agrega automaticamente el prefijo ```SIGSM-``` al nombre proporcionado y verifica que el grupo no exista previamente. Si ya se encuentra registrado, se mostrar un mensaje de error y no se realizara ninguna modificacion.
+
+Si el grupo no existe, sera creado en el sistema.
+
+```text
+5) Eliminar un Grupo Personalizado
+```
+Esta opcion permite eliminar un grupo personalizado del servidor. Para realizar la operacion, se debe ingresar el nombre del grupo que se desea eliminar.
+
+El sistema agrega automaticamente el prefijo ```SIGSM-``` al nombre proporcionado y verifica que el grupo exista previamente. Si el grupo no existe, se mostrara un mensaje de error y no se realizara ninguna modificacion.
+
+Si el grupo existe, se procedera a eliminarlo del sistema. En caso de que el grupo sea utilizado como grupo primario de algun usuario la eliminacion no podra realizarse y mostrara error.
+
 
 </details>
 
