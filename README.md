@@ -41,6 +41,8 @@
 - [👥 Equipo de Desarrollo (EDSU)](#-equipo-de-desarrollo-edsu)
 - [🚀 Instalacion y Despliegue](#-instalacion-y-despliegue)
 - [🐧 Sistemas Operativos y Seguridad (ASO)](#-sistemas-operativos-y-seguridad-aso)
+- [👥 Desarrollo Web & Experiencia de Usuario](#-desarrollo-web--experiencia-de-usuario)
+- [</> Uso de la Consola de Operador (script)](#-uso-de-la-consola-de-operador)
 
 ---
 ## 💡 Acerca del Proyecto 
@@ -138,3 +140,67 @@ Abre el **XAMPP CONTROL PANEL** e inicia los servicios:
 8. Finalmente, ejecutá el script mediante el botón ```"Continuar"``` que aparece en phpMyAdmin(Ya quedaria la BD Importada Correctamente)
     
 </details>
+
+## 👥 Desarrollo Web & Experiencia de Usuario
+**Interfaces Mobile-First** Desarrollada para dar Prioridad a cualquier tipo de dispositivo Movil facilitando al Usuario y siendo amigable.  
+<!-- Primero las Interfaces Mobiles -->
+
+**Modulo QR para Pacientes** Escaneo rapido para ingresar al portal de Pacientes (Donde se podra ver cosas como los Documentos, Encuestas.etc)
+
+**Gestion Administrativa** Esto ya depende mas del script y del Portal de administradores/administrativos que es parte para cargar documentos, actualizar, dar permisos, quitar permisos, agregar usuarios/grupos a roles.etc
+
+---  
+
+## </> Uso de la Consola de Operador (script)
+
+La gestion se realiza mediante el script interactivo que desarrollamos:
+`scriptEDSU_V(Beta).sh`.
+
+```bash 
+# Otorgar permisos de ejecución
+chmod +x scriptEDSU_V(Beta).sh
+```
+<!-- El "bash" se podria cambiar tmb por cualquier lenguaje que agarre markdown, que puede ser css, python, javascript, java, html.etc (No se si agarra todos, pero agarra bastantes) -->
+
+```bash 
+# Abrirlo (SIEMPRE CON ROOT, ya que controlas cosas criticas con el script)
+sudo ./scriptEDSU_V(Beta).sh
+```
+
+### Banner de la Empresa en Consola
+El script incluye tambien un banner/logo en arte ASCII de **EDSU** solamente utilizando nuestro logo que es una **E** con colores cian.
+
+```text
+=============================================================
+   S.I.G.S.M. - CONSOLA DE ADMINISTRACIÓN DEL SERVIDOR
+         (Ducasse, Galli, Salas, Correa - EDSU)
+=============================================================
+ --- Usuarios y Grupos --
+ 1) Crear un Nuevo Usuario (Asociación automática a Grupo)
+ 2) Eliminar un Usuario (Limpieza total de HOME)
+ 3) Listar Usuarios del Sistema S.I.G.S.M.
+ 4) Crear un Grupo Personalizado
+ 5) Eliminar un Grupo Personalizado
+ 6) Listar Grupos del Sistema S.I.G.S.M. (tiempo real)
+ <---------------------------------------------------------->
+ --- Seguridad de Datos (Ley 18.331) ---
+ 7) Cifrar un Archivo Sensible
+ 8) Descifrar un Archivo Protegido
+ 9) Generar Respaldo Cifrado del Sistema
+<----------------------------------------------------------->
+ --- Monitoreo y Auditoría ---
+10) Monitorear Recursos del Servidor (CPU/RAM/Disco)
+11) Ver Auditoría de Accesos (Logs de autenticación/SSH)
+<----------------------------------------------------------->
+ --- Hardening del Servidor ---
+12) Aplicar Hardening al Servicio SSH (sin clave pública)
+13) Configurar Firewall Perimetral (UFW)
+14) Aplicar Permisos al Directorio de la Aplicación
+<----------------------------------------------------------->
+15) Salir de la Consola
+=============================================================
+```
+
+---
+<!-- Si estas leyendo esto, te recuerdo que faltan cosas aun y que por eso no se explico cada opcion, ni se detallo a fondo, aun faltan varias cositas que voy a ir agregando con el tiempo porq me toma tiempo documentar correctamente. -->
+
