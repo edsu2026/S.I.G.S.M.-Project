@@ -21,7 +21,7 @@
                         <a href="index.html" class="button button-link">inicio</a>
                     </span>
                     <span>
-                        <a href="encuestas.html" class="button button-link">encuestas</a>
+                        <a href="encuestas.php" class="button button-link">encuestas</a>
                     </span>
                     <span>
                         <a href="preguntas.html" class="button button-link">ayuda</a>

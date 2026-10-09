@@ -28,32 +28,17 @@
 
 .button-panel {
     padding: var(--button-default-padding);
-    border: var(--button-default-bordersize) solid rgba(var(--color-white));
+    border: var(--button-default-bordersize) solid var(--color-white);
     text-decoration: none;
     text-align: center;
     font-weight: 600;
     transition:
-        border var(--button-transition-default-time) var(--button-transition-default-style),
+        border-color var(--button-transition-default-time) var(--button-transition-default-style),
         background-color var(--button-transition-default-time) var(--button-transition-default-style);
 }
 
 .button-panel:hover {
-    border: var(--button-default-bordersize) solid rgba(var(--color-white), 0);
-    background-color: var(--color-white);
-    color: black
-}
-
-.button-dropdown {
-    padding: var(--button-default-padding);
-    border: var(--button-default-bordersize) solid rgba(255, 255, 255, 0);
-    font-weight: 600;
-    transition:
-        border var(--button-transition-default-time) var(--button-transition-default-style),
-        background-color var(--button-transition-default-time) var(--button-transition-default-style);
-}
-
-.button-dropdown:hover {
-    border: var(--button-default-bordersize) solid rgba(255, 255, 255, 1);
+    border-color: transparent;
     background-color: var(--color-white);
     color: black;
 }
@@ -72,14 +57,14 @@
     color: var(--color-white);
     font-weight: 600;
     font-size: 2rem;
-    opacity: 0.6; /* Hace el elemento y su imagen semi-transparentes */
-    border: 2px solid transparent; /* Evita saltos de maquetación al aparecer el borde */
-    transition: all 0.3s ease; /* Suaviza el cambio de tamaño, opacidad y borde */
-    display: block; /* Asegura que la transformación funcione correctamente */
+    opacity: 0.6;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    display: block;
 }
 
 .button-image-transparent:hover {
-    opacity: 1; /* Hace el elemento y su imagen completamente visibles al pasar el ratón */
-    transform: scale(1.05); /* Aumenta ligeramente el tamaño del elemento */
-    border: 2px solid var(--color-white); /* Añade un borde blanco al pasar el ratón */
+    opacity: 1;
+    transform: scale(1.05);
+    border: 2px solid var(--color-white);
 }

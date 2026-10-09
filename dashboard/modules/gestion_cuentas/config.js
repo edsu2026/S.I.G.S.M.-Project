@@ -1,5 +1,3 @@
-console.log("Hola perritas")
-
 const options = ['create', 'update', 'activate', 'delete'];
 let actualMode = 'form-create';
 

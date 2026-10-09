@@ -4,6 +4,7 @@
 
     $styles = "$repositorio/styles";
     $assets = "$repositorio/assets";
+
     require "$repositorio/php/conexion.php";
     $sqlCategoria = "SELECT * FROM categoria WHERE activo = 1";
     $stmt = $conexion->query($sqlCategoria);
@@ -45,10 +46,10 @@
             <!-- Menu Lateral -->
             <div class="d-flex flex-column col-md-3 col-sm-12 justify-content-between rounded-start" style="background-color: rgba(1, 1, 1, 0.7); padding: 20px;">
                 <section class="d-flex flex-column gap-2">
-                    <a href="<?= $modules ?>/gestion_cat/panel.php" class="button-panel button-theme-blue rounded">
+                    <a href="<?= $repositorio ?>/documentos.php" class="button-panel button-theme-blue rounded">
                         Documentos
                     </a>
-                    <a href="<?= $modules ?>/gestion_enc/panel.php" class="button-panel button-theme-blue rounded">
+                    <a href="<?= $repositorio ?>/encuestas.php" class="button-panel button-theme-blue rounded">
                         Encuestas
                     </a>
                 </section>
