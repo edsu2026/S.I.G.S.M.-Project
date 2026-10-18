@@ -90,7 +90,7 @@ La infraestructura del servidor cuenta con seguridad bastante pulida.
 ### 4. Permisos de Archivos y Directorios
 - Directorio de la aplicación web `/var/www/html/sigsm` configurado con permiso  **`770`** (`drwxrwx---`).
 - Propietario: `www-data` | Grupo: `SIGSM-administradores`.
-- Impide el acceso no autorizado desde la consola local a datos médicos sensibles.
+- Impide el acceso no autorizado desde la consola local a datos médicos.
 
 ### 5. Roles y Acceso al Servidor
 Al servidor (backend) **solo acceden los Administradores**. El personal administrativo del hospital y los pacientes usan unicamente el frontend (la aplicacion web), por lo que **no tienen cuenta en el sistema operativo**.
@@ -98,7 +98,7 @@ Al servidor (backend) **solo acceden los Administradores**. El personal administ
 | Perfil | Cuenta en el servidor | Como accede |
 | :--- | :---: | :--- |
 | **Administradores** (`SIGSM-administradores`) | ✅ Si | SSH (puerto `22022`) y Consola de Operador |
-| **Personal administrativo** | ❌ No | Portal web con sus credenciales habituales del hospital |
+| **Personal Administrativo** | ❌ No | Portal web con Login |
 | **Pacientes** | ❌ No | Escaneando el codigo QR desde el celular (sin usuario) |
 | `www-data` | ⚙️ Cuenta de servicio | Usuario con el que corre Apache, dueño de la aplicacion |
 
