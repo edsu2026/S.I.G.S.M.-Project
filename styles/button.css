@@ -2,29 +2,57 @@
     --button-default-padding: 5px;
     --button-default-bordersize: 2px;
 
-    --button-transition-default-style: ease-out;
-    --button-transition-default-time: .2s;
+    --button-transition-default-style: ease;
+    --button-transition-default-time: .4s;
+
+    --button-color-blue: rgb(19, 87, 197);
+}
+
+.button-card {
+    background-color: var(--button-color-blue);
+    border: 3px solid var(--button-color-blue);
+    overflow: hidden;
+    border-radius: 20px;
+    border-bottom: 3px solid rgb(30, 0, 255);
+    color: white;
+    transition: 
+        background-color var(--button-transition-default-time) var(--button-transition-default-style),
+        border var(--button-transition-default-time) var(--button-transition-default-style),
+        color var(--button-transition-default-time) var(--button-transition-default-style);
+}
+
+.button-card:active {
+    background-color: white;
+    border: 3px solid var(--color-lightgray);
+    color: var(--button-color-blue);
 }
 
 .button-link {
+    padding: 5px 5px;
     background-color: transparent;
+    color: rgb(232, 232, 232);
     border: none;
     text-decoration: none;
-    color: var(--color-white);
-    font-size: 0.75rem;
-    font-weight: 500;
-    padding-bottom: 3px;
-    border-bottom: 8px solid transparent;
-    transition: border-bottom var(--button-transition-default-time) var(--button-transition-default-style);
+    font-weight: 300;
+    border-bottom: 1px solid transparent;
+    transition:
+        border-bottom var(--button-transition-default-time) var(--button-transition-default-style),
+        color var(--button-transition-default-time) var(--button-transition-default-style);
 }
 
 .button-link:hover {
-    border-bottom: 2px solid var(--color-white);
+    color: white;
+    border-bottom: 1px solid white;
 }
 
 .button {
     text-decoration: none;
 }
+
+/* 
+    Button panel INICIO
+    Botones que aparecen en los paneles laterales, como en los de dashboard/panel/page.php
+*/
 
 .button-panel {
     padding: var(--button-default-padding);
@@ -37,34 +65,58 @@
         background-color var(--button-transition-default-time) var(--button-transition-default-style);
 }
 
-.button-panel:hover {
-    border-color: transparent;
-    background-color: var(--color-white);
-    color: black;
-}
+/*
+    Temáticas de los botones
+*/
 
 .button-theme-blue {
     background-color: var(--color-blue);
     color: var(--color-white);
+    border: 1px solid transparent;
+    transition:
+        border var(--button-transition-default-time) var(--button-transition-default-style),
+        background-color var(--button-transition-default-time) var(--button-transition-default-style),
+        color var(--button-transition-default-time) var(--button-transition-default-style);
+}
+
+.button-theme-blue:hover {
+    background-color: white;
+    color: var(--color-blue);
+    border: 1px solid var(--color-blue);
+}
+
+.button-theme-lightblue {
+    background-color: var(--color-lightblue);
+    color: var(--color-white);
+    border: 1px solid transparent;
+    transition:
+        border var(--button-transition-default-time) var(--button-transition-default-style),
+        background-color var(--button-transition-default-time) var(--button-transition-default-style),
+        color var(--button-transition-default-time) var(--button-transition-default-style);
+}
+
+.button-theme-lightblue:hover {
+    background-color: white;
+    color: var(--color-lightblue);
+    border: 1px solid var(--color-lightblue);
 }
 
 .button-theme-red {
+    border: 1px solid var(--color-lightblue);
     background-color: var(--color-red);
     color: var(--color-white);
 }
 
-.button-image-transparent {
-    color: var(--color-white);
-    font-weight: 600;
-    font-size: 2rem;
-    opacity: 0.6;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-    display: block;
+.button-theme-lightred {
+    border: 1px solid var(--color-lightred);
+    background-color: var(--color-lightred);
+    color: white;
+    transition:
+        background-color var(--button-transition-default-time) var(--button-transition-default-style),
+        color var(--button-transition-default-time) var(--button-transition-default-style);
 }
 
-.button-image-transparent:hover {
-    opacity: 1;
-    transform: scale(1.05);
-    border: 2px solid var(--color-white);
+.button-theme-lightred:hover {
+    color: var(--color-lightred);
+    background-color: white;
 }

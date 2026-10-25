@@ -1,4 +1,4 @@
-USE "hospital";
+USE hospital;
 
 INSERT INTO categoria (nombre_categoria, activo) VALUES 
 ("Oftalmología", true),

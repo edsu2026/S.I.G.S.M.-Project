@@ -1,0 +1,14 @@
+.table-tr td {
+    font-weight: 300;
+    cursor: pointer;
+    transition: background-color .2s ease;
+}
+
+.table-tr button {
+    background: transparent;
+    border: none;
+}
+
+.table-tr:hover td {
+    background-color: rgba(0, 179, 255, 0.1);
+}

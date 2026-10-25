@@ -1,7 +1,13 @@
-.card-custom-bg {
-    background-image: url('assets/img/bg-encuestas.jpg');
-    background-position: center top;
-    background-size: cover;
-    font-weight: bold;
-    height: 200px;
+
+/*
+    Card que, al arrastrar el mouse por arriba, el texto por encima podrá ser visible. 
+*/
+.card-campaign > .card-overlapped {
+    opacity: 0;
+    transition: 
+        opacity .3s ease;
+}
+
+.card-campaign:hover > .card-overlapped {
+    opacity: 0.8;
 }
