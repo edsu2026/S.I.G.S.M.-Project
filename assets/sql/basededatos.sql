@@ -21,13 +21,6 @@ CREATE TABLE IF NOT EXISTS categoria(
     PRIMARY KEY(id_categoria)
 );
 
-CREATE TABLE IF NOT EXISTS encuestasHabilitadas(
-    id_user INT NOT NULL,
-    id_servicio INT NOT NULL,
-    FOREIGN KEY(id_user) REFERENCES usuario(id_user),
-    FOREIGN KEY(id_servicio) REFERENCES categoria(id_categoria)
-);
-
 CREATE TABLE IF NOT EXISTS documento(
 	id_documento INT AUTO_INCREMENT NOT NULL,
     id_categoria INT NOT NULL,
@@ -38,13 +31,14 @@ CREATE TABLE IF NOT EXISTS documento(
     FOREIGN KEY(id_categoria) REFERENCES categoria(id_categoria)
 );
 
-CREATE TABLE IF NOT EXISTS encuesta(
-	id_encuesta INT AUTO_INCREMENT NOT NULL,
+CREATE TABLE IF NOT EXISTS reseña(
+	id_reseña INT AUTO_INCREMENT NOT NULL,
     id_categoria INT NOT NULL,
-    nombre_encuesta CHAR(32) NOT NULL UNIQUE,
-    atención FLOAT NOT NULL,
-    tiempo FLOAT NOT NULL,
-    PRIMARY KEY(id_encuesta),
+    atención INT NOT NULL,
+    tiempo INT NOT NULL,
+    profesionalismo INT NOT NULL,
+    condiciones INT NOT NULL,
+    PRIMARY KEY(id_reseña),
     FOREIGN KEY(id_categoria) REFERENCES categoria(id_categoria)
 );
 
@@ -71,6 +65,5 @@ CREATE TABLE IF NOT EXISTS gestionEnc(
 	id_administrador INT NOT NULL,
     id_encuesta INT NOT NULL,
     fecha DATETIME NOT NULL,
-    FOREIGN KEY(id_administrador) REFERENCES usuario(id_user),
-    FOREIGN KEY(id_encuesta) REFERENCES encuesta(id_encuesta)
+    FOREIGN KEY(id_administrador) REFERENCES usuario(id_user)
 );

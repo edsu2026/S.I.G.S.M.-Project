@@ -10,10 +10,13 @@
     # PDO
     require $repositorio . 'php/conexion.php';
 
-    $id_categoria = 0;
     $id_documento = 0;
 
     if ($_SERVER["REQUEST_METHOD"] == "GET"):
+        $id_categoria = $_GET['id_categoria'] ?? NULL;
+        if (!isset($_GET['accion'])) {
+            exit('No se declaró la acción');
+        }
 ?>
 
 <!DOCTYPE html>
@@ -27,6 +30,7 @@
     <link rel="stylesheet" href="<?= $styles ?>/card-custom.css">
     <link rel="stylesheet" href="<?= $styles ?>/main.css">
     <link rel="stylesheet" href="<?= $styles ?>/input.css">
+    <link rel="stylesheet" href="<?= $styles ?>/buttongroup.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
@@ -73,47 +77,94 @@
         <!--
             Contenedor principal
         -->
-        <main class="row d-flex justify-content-center main-mt">
+        <main class="row d-flex flex-row justify-content-center" style="margin-top: 110px; height: 490px;">
             <!-- Contenedor del panel -->
-            <?php switch ($_GET['accion']):
-                case 'create': ?>
-                <div class="col-10 d-flex flex-column rounded align-items-center justify-content-center" style="border: 1px solid rgba(0, 0, 0, 0.3); max-height: 60%;">
-                    <h5>Categoria: <?= $_GET['id_categoria'] ?></h5>
-                    <form action="<?= $repositorio ?>php/modules/manage/document.php" method="POST" enctype="multipart/form-data" class="col-12 d-flex flex-column justify-content-center align-items-center gap-3">
-                        
-                        <input type="hidden" id="document-category-input" name="category_id" value="<?= $id_categoria ?>" required>
-                        <input type="text" id="document-name-input" name="document-name-input" class="col-12 col-md-8 input-def" placeholder="Ingrese nombre del documento" required>
-                        <input type="file" id="document-file-input" name="document-file-input" class="col-12 col-md-8 input-def" required>
-                        
-                        <button name="accion" value="create" type="submit" class="col-12 col-md-8 button-panel button-theme-lightblue rounded">Crear</button>
-                    </form>
-                </div>
-            <?php 
-                    break;
-                case 'update': ?>
-                    <div class="col-10 d-flex flex-column rounded align-items-center justify-content-center" style="border: 1px solid rgba(0, 0, 0, 0.3); max-height: 60%;">
-                        <h5>Documento: <?= $_GET['id_documento'] ?></h5>
+            <div class="col-12 d-flex flex-column justify-content-center flex-md-row">
+                <?php switch ($_GET['accion']):
+                case 'create': 
+                    if (filter_var($id_categoria, FILTER_VALIDATE_INT) == false || $id_categoria < 1) {
+                        die("La categoría no existe o se ingresó información inválida");
+                    };
+                    ?>
+                    <div class="col-12 d-flex flex-column rounded align-items-center justify-content-center" style="border: 1px solid rgba(0, 0, 0, 0.3);">
+                        <h5>Categoria: <?= $_GET['id_categoria'] ?></h5>
                         <form action="<?= $repositorio ?>php/modules/manage/document.php" method="POST" enctype="multipart/form-data" class="col-12 d-flex flex-column justify-content-center align-items-center gap-3">
                             
-                            <input type="hidden" id="document-category-input" name="document_id" value="<?= $_GET['id_documento'] ?>" required>
+                            <input type="hidden" id="document-category-input" name="category_id" value="<?= $id_categoria ?>" required>
+                            <input type="text" id="document-name-input" name="document-name-input" class="col-12 col-md-8 input-def" placeholder="Ingrese nombre del documento" required>
+                            <input type="file" id="document-file-input" name="document-file-input" class="col-12 col-md-8 input-def" required>
+                            
+                            <button name="accion" value="create" type="submit" class="col-12 col-md-8 button-panel button-theme-lightblue rounded">Crear</button>
+                        </form>
+                    </div>
+                <?php 
+                    break;
+                case 'update':
+                    //  Obtenemos el documento
+                    $document_id = $_GET['id_documento'] ?? exit('Se debe de pasar un documento');
+                    
+                    //  Validamos
+                    if (filter_var($document_id) == false || $document_id < 1) {
+                        die('Se necesita ingresar la identificación (id único) de un documento');
+                    }
+
+                    //  Consulta
+                    $sql = $conexion->prepare("SELECT * FROM documento WHERE id_documento = :id");
+                    $sql->bindParam(":id", $document_id, PDO::PARAM_INT);
+                    $sql->execute();
+
+                    //  Validamos obtención
+                    if ($sql->rowCount() < 1) {
+                        die('El documento ingresado no existe');
+                    }
+
+                    //  Información del documento
+                    $document_data = $sql->fetch();
+                ?>
+                    <div class="col-12 col-md-2 d-flex flex-column p-1" style="border-right: 1px solid rgba(0, 0, 0, 0.3); box-shadow: 6px 0 5px -2px rgba(0, 0, 0, 0.3);">
+                        <h5>Opciones<h5>
+                        <hr>
+                        <h5>Estado</h5>
+                        <form action="<?= $repositorio ?>/php/modules/manage/document.php" method="POST" class="col-12 grp-buttons">
+                            <input type="text" id="document-id-input" name="document-id-input"   value="<?= $document_id ?>" hidden>
+                            <?php switch ($document_data['activo']) {
+                                case true:  ?> <button name="accion" value="deactivate" class="button-theme-lightblue">Desactivar</button> <?php break;
+                                case false: ?> <button name="accion" value="activate"   class="button-theme-lightblue">Activar   </button> <?php break;
+                                default:    break;
+                            }?>
+                            <button name="accion" value="delete" class="button-theme-lightred">Eliminar</button>
+                        </form>
+                    </div>
+                    <div class="col-12 col-md-8 d-flex flex-column align-items-center justify-content-center rounded" style="height: 100%;">
+                        <form action="<?= $repositorio ?>php/modules/manage/document.php" method="POST" enctype="multipart/form-data" class="col-12 d-flex flex-column justify-content-center align-items-center gap-3">
+                            <input type="text" id="document-id-input" name="document-id-input"   value="<?= $document_id ?>" hidden>
                             <input type="text" id="document-name-input" name="document-name-input" class="col-12 col-md-8 input-def" placeholder="Ingrese nuevo nombre" required>
                             <input type="file" id="document-file-input" name="document-file-input" class="col-12 col-md-8 input-def" required>
                             
                             <div class="col-12 col-md-8 d-flex flex-column align-items-center justify-content-center gap-1">
-                                <button name="accion" value="create" type="submit" class="col-12 button-panel button-theme-lightblue rounded">Actualizar</button>
-                                <button name="accion" value="delete" type="submit" class="col-12 button-panel button-theme-lightred rounded">Eliminar</button>
+                                <button name="accion" value="update" type="submit" class="col-12 button-panel button-theme-lightblue rounded">Actualizar</button>
                             </div>
                         </form>
                     </div>
-            <?php 
-                    break;
-                default:
-                    # code...
-                    break;
-                endswitch;
-            endif
-            ?>
-            
+                    <div class="col-12 col-md-2 d-flex flex-column p-2" style="border-left: 1px solid rgba(0, 0, 0, 0.3); box-shadow: -6px 0 5px -2px rgba(0, 0, 0, 0.3);">
+                        <h5>Propiedades</h5>
+                        <hr>
+                        <!-- Lista -->
+                        <div class="d-flex flex-column" style="font-weight: 300">
+                            <p>Documento: <?= $document_id ?></p>
+                            <p>Estado:    <?php if ($document_data['activo'] == true): echo "<p class='badge bg-success col-12'>Activo</p>"; else: echo "<p class='badge bg-danger col-12'>Desactivo</p>"; endif?></p>
+                            <p>Categoria: <?= $document_data['id_categoria'] ?></p>
+                        </div>
+                    </div>
+                    <?php 
+                            break;
+                        default:
+                            # code...
+                            break;
+                        endswitch;
+                    endif
+                    ?>
+            </div>
         </main>
     </div>
     <script src="<?= $styles ?>/main.js"></script>

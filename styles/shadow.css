@@ -1,0 +1,18 @@
+/**
+    shadow.css almacena los estilos de sombras que se usan en el proyecto
+*/
+
+/*  sigsm-shadow-y-1 deja un espacio en el eje vertical en la parte superior con 5px   */
+.sigsm-shadow-y-1 {
+    box-shadow: 0 5px 15px 1px rgba(60, 60, 60, 0.3) !important;
+}
+
+/*  sigsm-shadow-y-2 deja un espacio en el eje vertical en la parte superior en 10px   */
+.sigsm-shadow-y-2 {
+    box-shadow: 0 10px 15px 1px rgba(60, 60, 60, 0.3) !important;
+}
+
+/*  sigsm-shadow-y-3 deja un espacio en el eje vertical en la parte superior en 15px   */
+.sigsm-shadow-y-2 {
+    box-shadow: 0 15px 15px 1px rgba(60, 60, 60, 0.3) !important;
+}

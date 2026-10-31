@@ -34,8 +34,9 @@
     <link rel="stylesheet" href="<?= $styles ?>/button.css">
     <link rel="stylesheet" href="<?= $styles ?>/card-custom.css">
     <link rel="stylesheet" href="<?= $styles ?>/main.css">
-    <link rel="stylesheet" href="buttongroup.css">
+    <link rel="stylesheet" href="<?= $styles ?>/buttongroup.css">
     <link rel="stylesheet" href="<?= $styles ?>/input.css">
+    <link rel="stylesheet" href="<?= $styles ?>/shadow.css">
     <link rel="stylesheet" href="table.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
@@ -84,35 +85,38 @@
                     </div>
                 </div>
                 <!-- Contenido principal -->
-                <div class="col-10 d-flex flex-column" style="border: 1px solid rgba(0, 0, 0, 0.3);">
+                <div class="d-flex col-12 col-md-10 flex-column" style="border: 1px solid rgba(89, 89, 89, 0.3);">
                     <!-- Categorias -->
                     <div id="content-categories" class="col-12 d-flex flex-column justify-content-center d-block">
                         <!-- Creación de categorías -->
                         <form action="<?= $repositorio ?>php/modules/manage/category.php" method="POST" id="content-categories-create" class="col-12 d-flex flex-column align-items-center gap-2" style="padding: 20px; border: 1px solid rgba(0, 0, 0, 0.3);">
                             <h5>Crear categoría</h5>
-                            <input name="category-create-input" type="text" class="col-10 input-def" placeholder="Ingrese nombre de la nueva categoría" style="height: 30px">
+                            <input name="category-name-input" type="text" class="col-10 input-def" placeholder="Ingrese nombre de la nueva categoría" style="height: 30px">
                             <div id="content-categories-create-options" class="col-10 d-flex flex-row-reverse">
-                                <button type="submit" name="action" value="create" class="col-3 button button-panel button-theme-lightblue rounded">Crear</button>
+                                <button type="submit" name="accion" value="create" class="col-3 button button-panel button-theme-lightblue rounded">Crear</button>
                             </div>
                         </form>
                         <!-- Categorias y configuracion -->
-                        <div class="col-12 d-flex flex-row">
-                            <!-- Buttons -->
-                            <div id="content-categories-category-selector" class="col-3 grp-buttons" style="border: 1px solid rgba(0, 0, 0, 0.3);">
+                        <div class="col-12 d-flex flex-column flex-md-row justify-content-md-between">
+                            <!-- Contenedor de botones de selección de categorías -->
+                            <div id="content-categories-category-selector" class="col-12 col-md-3 grp-buttons" style="border: 1px solid rgba(0, 0, 0, 0.3);">
                                 
                             </div>
-                            <!-- Documentos -->
-                            <div class="col-9" style="border: 1px solid rgba(0, 0, 0, 0.3); color: rgba(0, 0, 0, 0.5);">
+                            <div id="content-categories-category-unselected" class="d-flex col-12 col-md-9 align-items-center justify-content-center">
+                                <h5>Seleccione una categoría o cree una</h5>
+                            </div>
+                            <!-- Documentos y encuestas -->
+                            <div id="content-categories-category-content" class="col-12 col-md-9 d-none" style="border: 1px solid rgba(0, 0, 0, 0.3); color: rgba(0, 0, 0, 0.5);">
                                 <!-- Title categoria -->
                                 <h5 id="content-category-selected-name" style="margin-left: 5px;">Seleccione categoría</h5>
                                 <!-- Opciones cat seleccionada -->
                                 <form action="<?= $repositorio ?>php/modules/manage/category.php" method="POST" class="col-12 d-flex flex-column justify-content-start p-1 gap-1">
-                                    <input type="hidden" id="category-id-rename-input" name="category-id-rename-input" value="">
-                                    <input id="category-new-name-input" name="category-new-name-input" type="text" placeholder="Ingrese nuevo nombre" class="col-12 input-def" required>
+                                    <input type="hidden" id="category-rename-id-input" name="category-id-input" value="">
+                                    <input id="category-name-input" name="category-name-input" type="text" placeholder="Ingrese nuevo nombre" class="col-12 input-def" required>
                                     <div id="content-category-selected-options-menu" class="col-12 d-flex flex-row justify-content-center gap-2">
-                                        <button value="update" type="submit" name="action" class="col-3 button button-panel button-theme-lightblue rounded">Actualizar</button>
-                                        <button value="deactivate" type="submit" name="action" class="col-3 button button-panel button-theme-lightblue rounded">Desactivar</button>
-                                        <button value="delete" type="submit" name="action" class="col-3 button button-panel button-theme-lightred rounded">Eliminar</button>
+                                        <button value="update"      type="submit" name="accion" class="col-3 button button-panel button-theme-lightblue rounded">Actualizar</button>
+                                        <button value="deactivate"  type="submit" name="accion" class="col-3 button button-panel button-theme-lightblue rounded">Desactivar</button>
+                                        <button value="delete"      type="submit" name="accion" class="col-3 button button-panel button-theme-lightred rounded">Eliminar</button>
                                     </div>
                                 </form>
 
@@ -134,34 +138,43 @@
                                     </tbody>
                                 </table>
 
-                                <h5 style="margin-left: 5px;">Encuestas</h5>
-                                <table id="content-category-selected-surveys" class="table" style="border: 1px solid rgba(0, 0, 0, 0.3); color: rgba(0, 0, 0, 0.5); width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">Atención al Cliente</th>
-                                            <th scope="col">Tiempo</th>
-                                            <th scope="col">Resultado</th>
-                                            <th scope="col">Otro<th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="table-tr" onclick="redirect(1)">
-                                            <td scope="row">1</td>
-                                            <td>10.0</td>
-                                            <td>9.8</td>
-                                            <td>7.5</td>
-                                            <td><button>Editar</button></td>
-                                        </tr>
-                                        <tr class="table-tr" onclick="redirect(1)">
-                                            <td scope="row">2</td>
-                                            <td>8.0</td>
-                                            <td>9.8</td>
-                                            <td>7.5</td>
-                                            <td><button>Editar</button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <!-- Contenedor de los promedios de satisfacción por servicio -->
+                                <div class="col-9 d-flex flex-column flex-lg-row justify-content-between p-1" style="justify-self: center;">
+
+                                    <!-- Contenedor de cards que muestran valores numéricos como la cantidad de reseñas por categoría y demás -->
+                                    <div class="d-flex col-12 flex-row flex-lg-column justify-content-between align-items-center col-lg-4 flex-lg-row gap-4 p-3">
+
+                                        <!-- Contador de encuestas hechas -->
+                                        <div class="d-flex flex-column align-items-center justify-content-center sigsm-shadow-y-1" style="height: 150px; width: 150px; border: 1px solid rgba(0, 0, 0, 0.3); color: black; border-radius: 50px;">
+                                            <h5 style="font-size: 70px; color: rgba(0, 0, 0, 0.4);">371</h5>
+                                            <p class="fw-medium" style="font-size: 10px;">TOTAL</p>
+                                        </div>
+
+                                        <!-- Promedio general del servicio -->
+                                        <div class="d-flex flex-column align-items-center justify-content-center sigsm-shadow-y-1" style="height: 150px; width: 150px; border: 1px solid rgba(0, 0, 0, 0.3); color: black; border-radius: 50px;">
+                                            <h5 style="font-size: 70px; color: rgba(0, 0, 0, 0.4);">9.2</h5>
+                                            <p class="fw-medium" style="font-size: 10px;">PROMEDIO</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex col-12 flex-column col-lg-8 justify-content-between p-4" style="color: rgba(0, 0, 0, 1)">
+                                        <h5>Atención</h5>
+                                        <div class="col-12 progress sigsm-shadow-y-1" style="border: 1px solid rgba(255, 255, 255, 1);">
+                                            <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <h5>Tiempo</h5>
+                                        <div class="col-12 progress sigsm-shadow-y-1" style="border: 1px solid rgba(255, 255, 255, 1);">
+                                            <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <h5>Profesionalismo</h5>
+                                        <div class="col-12 progress sigsm-shadow-y-1" style="border: 1px solid rgba(255, 255, 255, 1);">
+                                            <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <h5>Condiciones</h5>
+                                        <div class="col-12 progress sigsm-shadow-y-1" style="border: 1px solid rgba(255, 255, 255, 1);">
+                                            <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

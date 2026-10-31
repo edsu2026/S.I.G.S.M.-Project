@@ -1,12 +1,16 @@
+const categoryUnselected = document.getElementById("content-categories-category-unselected");
+const categoryContent = document.getElementById("content-categories-category-content");
+var categorySelected = false;
+
 const categorySelectedTitle = document.getElementById("content-category-selected-name");
-// const categorySelectedDocuments = document.getElementById("content-category-selected-documents");
 
 // Localizamos el contenedor del botón de creación de documentos
 const btnDocumentCreateContainer = document.getElementById("content-category-selected-btn-document-create");
-const id_category_input = document.getElementById("category-id-rename-input");
+const id_category_input = document.getElementById("category-rename-id-input");
 const documentsTableBody = document.getElementById("content-category-selected-documents-tablebody");
 
 document.addEventListener('DOMContentLoaded', () => {
+
     // Tomamos las categorías inyectadas por PHP en la ventana global
     const categories = window.categories;
     const grpButtons = document.getElementById('content-categories-category-selector');
@@ -21,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Al hacer click en una categoría lateral
         button.addEventListener('click', () => {
+            console.log('clickeado');
+
             // 1. Almacenamos el título visual
             categorySelectedTitle.textContent = category['nombre_categoria'];
             
@@ -55,16 +61,29 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td>${nomDoc}</td>
                         <td>${fechaDoc}</td>
                         <td><span class="badge ${datosDocumento[3] === '1' ? 'bg-success' : 'bg-danger'}">${activoDoc}</span></td>
-                        <td><a href="../manage/document/page.php?accion=update&id_documento=${idDoc}" class="col-12 button-panel button-theme-lightred">Editar</button></td>
+                        <td><a href="../manage/document/page.php?accion=update&id_documento=${idDoc}" class="col-12 button-panel button-theme-lightblue rounded">Editar</button></td>
                     `;
                     documentsTableBody.appendChild(fila);
                 });
             } else {
                 documentsTableBody.innerHTML = `
                     <tr>
-                        <td class="text-muted text-center" colspan="4">Sin documentos en esta categoría</td>
+                        <td class="text-muted text-center col-12" colspan="4">Sin documentos en esta categoría</td>
                     </tr>
                 `;
+            }
+
+            /**
+             * Por defecto, el sistema no muestra el contenido de ninguna categoría hasta que el usuario seleccione
+             * alguna opción. Si es la primera vez que el usuario selecciona una categoría, el mensaje que le indica al
+             * usuario que seleccione una categoría, no será visible a menos que la página se recargue.
+             */
+            if (categorySelected == false) {
+                categoryUnselected.classList.add('d-none');
+
+                categoryContent.classList.remove('d-none');
+                categoryContent.classList.add('d-block');
+                categorySelected = true;
             }
         });
     });

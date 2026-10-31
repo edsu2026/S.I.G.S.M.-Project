@@ -11,10 +11,6 @@ body {
     background-color: rgb(255, 255, 255);
 }
 
-main {
-    height: 600px;
-}
-
 .main-mt {
     margin-top: 130px !important;
 }

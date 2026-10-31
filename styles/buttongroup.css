@@ -1,0 +1,23 @@
+.grp-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    background: transparent
+}
+
+.grp-buttons button {
+    background: transparent;
+    padding: 5px 3px;
+    border: none !important;
+    border-radius: 0px;
+    font-weight: 500;
+    font-width: 200;
+    font-size: 20px;
+    color: rgb(39, 39, 39);
+    transition:
+        background-color .1s ease-out;
+}
+
+.grp-buttons button:hover {
+    background-color: rgba(178, 229, 252, 0.4);
+}
