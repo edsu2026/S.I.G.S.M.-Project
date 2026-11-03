@@ -2,8 +2,8 @@
     --button-default-padding: 5px;
     --button-default-bordersize: 2px;
 
-    --button-transition-default-style: ease;
-    --button-transition-default-time: .4s;
+    --button-transition-default-style: ease-out;
+    --button-transition-default-time:  .1s;
 
     --button-color-blue: rgb(19, 87, 197);
 }
@@ -72,7 +72,7 @@
 .button-theme-blue {
     background-color: var(--color-blue);
     color: var(--color-white);
-    border: 1px solid transparent;
+    border:                1px solid transparent;
     transition:
         border var(--button-transition-default-time) var(--button-transition-default-style),
         background-color var(--button-transition-default-time) var(--button-transition-default-style),
@@ -88,7 +88,8 @@
 .button-theme-lightblue {
     background-color: var(--color-lightblue);
     color: var(--color-white);
-    border: 1px solid transparent;
+    border:                1px solid transparent;
+    border-bottom:         5px solid rgb(16, 38, 204);
     transition:
         border var(--button-transition-default-time) var(--button-transition-default-style),
         background-color var(--button-transition-default-time) var(--button-transition-default-style),
@@ -99,6 +100,7 @@
     background-color: white;
     color: var(--color-lightblue);
     border: 1px solid var(--color-lightblue);
+    border-bottom:         5px solid var(--color-blue);
 }
 
 .button-theme-red {
@@ -108,15 +110,19 @@
 }
 
 .button-theme-lightred {
-    border: 1px solid var(--color-lightred);
     background-color: var(--color-lightred);
+    border:                1px solid transparent;
+    border-bottom:         5px solid rgb(238, 50, 50);
     color: white;
     transition:
+        border var(--button-transition-default-time) var(--button-transition-default-style),
         background-color var(--button-transition-default-time) var(--button-transition-default-style),
         color var(--button-transition-default-time) var(--button-transition-default-style);
 }
 
 .button-theme-lightred:hover {
+    border:                1px solid rgb(238, 50, 50);
+    border-bottom:         5px solid rgb(238, 50, 50);
     color: var(--color-lightred);
     background-color: white;
 }

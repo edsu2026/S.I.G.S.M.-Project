@@ -38,7 +38,7 @@
         <!--
             Contenedor principal
         -->
-        <main class="row d-flex flex-column flex-md-row justify-content-center">
+        <main class="row d-flex flex-column flex-md-row justify-content-center h-100">
             <!-- Contenedor del form -->
             <div class="col-12 col-md-6 d-flex flex-column justify-content-center align-items-center gap-3 p-5 rounded vh-50" style="border: 1px solid rgba(0, 0, 0, 0.4);">
                 <form action="<?= $repositorio ?>php/modules/user/account.php" method="POST" class="col-12 d-flex flex-column align-items-center gap-3">
@@ -49,20 +49,6 @@
             </div>
             <div class="login-right col-12 col-md-6 d-flex gap-3 p-5 rounded shadow vh-50" style="border: 1px solid rgba(0, 0, 0, 0.4);"></div>
         </main>
-
-        <footer class="row theme-darkblue justify-content-center">
-            <div class="col-12 d-flex justify-content-center gap-4 align-items-center">
-                <section>
-                    <p class="mb-0">E.D.S.U.</p> <!-- mb-0 quita el margen del párrafo -->
-                </section>
-                <section>
-                    <p class="mb-0">Hospital de Clínicas</p> <!-- mb-0 quita el margen del párrafo -->
-                </section>
-            </div>
-            <div class="col-12 d-flex justify-content-center">
-                <p class="mb-0" style="color: rgb(212, 188, 255)">© 2026 Todos los derechos reservados</p> <!-- mb-0 quita el margen del párrafo -->
-            </div>
-        </footer>
     </div>
     <script src="<?= $styles ?>/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>

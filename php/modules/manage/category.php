@@ -2,19 +2,9 @@
     function category_name_isvalid($category_name) {
         $category_name = trim($category_name);
 
-        if (empty($category_name)) {
-            return false;
-        }
-
-        if (mb_strlen($category_name, 'UTF-8') > 32 || mb_strlen($category_name, 'UTF-8') < 6) {
-            return false;
-        }
-
-        // Validar que solo contenga letras (incluyendo ñ y espacios)
-        // No permite números ni letras especiales como @, $, *, etc.
-        if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+$/u", $category_name)) {
-            return false;
-        }
+        if (empty($category_name)) return false;
+        if (mb_strlen($category_name, 'UTF-8') > 32 || mb_strlen($category_name, 'UTF-8') < 6) return false;
+        if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+$/u", $category_name))  return false;
 
         return true; 
     }
@@ -39,9 +29,12 @@
                         die('El nombre que se intenta ingresar no es válido');
                     }
 
+                    $token_categoria    =   bin2hex(random_bytes(32)); // Genera un token de 64 caracteres
+
                     //  Consulta
-                    $sql                =   $conexion->prepare("INSERT INTO categoria (nombre_categoria) VALUE (:catname)");
+                    $sql                =   $conexion->prepare("INSERT INTO categoria (nombre_categoria, token_categoria) VALUE (:catname, :cattoken)");
                     $sql->bindParam(":catname", $category_name, PDO::PARAM_STR);
+                    $sql->bindParam(":cattoken", $token_categoria, PDO::PARAM_STR);
                     $sql->execute();
 
                     //  Validamos que se haya insertado alguna tabla

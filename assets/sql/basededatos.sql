@@ -4,18 +4,16 @@ USE hospital;
 
 CREATE TABLE IF NOT EXISTS usuario(
 	id_user INT AUTO_INCREMENT NOT NULL,
-    ci CHAR(8) NOT NULL,
-    nombre CHAR(16) NOT NULL,
-    apellido CHAR(16) NOT NULL,
     email CHAR(72) UNIQUE NOT NULL,
-    contraseña CHAR(32) NOT NULL,
-    rol CHAR(32) NOT NULL DEFAULT 'paciente',
+    contraseña CHAR(255) NOT NULL,
+    rol CHAR(32) NOT NULL,
     activo BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY(id_user)
 );
 
 CREATE TABLE IF NOT EXISTS categoria(
 	id_categoria INT AUTO_INCREMENT NOT NULL,
+    token_categoria CHAR(64) NOT NULL UNIQUE,
     nombre_categoria CHAR(128) NOT NULL UNIQUE,
     activo BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY(id_categoria)

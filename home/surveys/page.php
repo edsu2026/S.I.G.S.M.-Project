@@ -1,27 +1,47 @@
 <?php
+    # Función para establecer la cookie de categoria seleccionada
+
     # carpeta principal
     $repositorio = '../../';
 
     # subcarpetas
-    $styles = $repositorio . 'styles';
-    $assets = $repositorio . 'assets';
-    $home = $repositorio . 'home';
+    $styles      = $repositorio . 'styles';
+    $assets      = $repositorio . 'assets';
+    $home        = $repositorio . 'home';
 
     # PDO
     require $repositorio . 'php/conexion.php';
 
-    $sql = "SELECT c.id_categoria, c.nombre_categoria, 
-        IF(d.id_documento IS NOT NULL, 
-            GROUP_CONCAT(CONCAT(d.id_documento, ';;', d.nombre_documento, ';;', d.fecha_creacion, ';;', d.activo) SEPARATOR '||'), 
-            NULL
-        ) AS documentos
-    FROM categoria c
-    LEFT JOIN documento d ON c.id_categoria = d.id_categoria
-    GROUP BY c.id_categoria";
+    # Obtenemos la cookie de encuestas disponibles
+    $surveys_available      = isset($_COOKIE['AVAILABLE_SURVEYS']) ? json_decode($_COOKIE['AVAILABLE_SURVEYS']) : false;
+    $surveys_url            = $home . '/surveys/survey/page.php';
 
-    $getCategories = $conexion->prepare($sql);
-    $getCategories->execute();
-    $categorias = $getCategories->fetchAll();
+    # Array de encuestas disponibles
+    $surveys            = [];
+
+    if ($surveys_available) {
+
+        #  Generamos una cookie para almacenar la encuesta seleccionada (así evitamos ingresarla en la URL)
+        setcookie('SELECTED_SURVEY', '', time() + (86400 * 30), '/'); // 30 días
+
+        #  Recorremos los tokens de encuestas disponibles y obtenemos la información de cada encuesta
+        foreach ($surveys_available as $survey_token) {
+
+            #  Consulta
+            $sql = $conexion->prepare("SELECT * FROM categoria WHERE token_categoria = :token");
+            $sql->bindParam(':token', $survey_token);
+            $sql->execute();
+
+            #  Obtenemos la información de la encuesta
+            $survey = $sql->fetchAll();
+            
+            #   Validamos que la categoria exista, si no, mostramos un mensaje de error
+            if ($survey) {
+                #  Agregamos la encuesta al array de encuestas disponibles
+                $surveys[] = $survey[0];
+            }
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -84,54 +104,47 @@
         -->
         <main class="row d-flex justify-content-center main-mt">
             <!-- Contenedor -->
-            <div class="col-12 d-flex flex-column flex-md-row justify-content-center align-items-sm-center">
+            <div class="col-12 d-flex flex-column justify-content-center align-items-center flex-md-row justify-content-md-between align-items-md-start">
 
                 <!-- Encuestas pendientes -->
-                <div class="col-11 col-md-10 d-flex flex-column justify-content-center align-items-center gap-3" style="margin-bottom: 40px;">
+                <div class="col-11 col-md-7 d-flex flex-column justify-content-center align-items-center gap-3" style="margin-bottom: 40px;">
 
-                    <!-- Enlace -->
-                    <a href="#" class="col-11 col-md-6 d-flex flex-row category-link sigsm-shadow-y-1 sigsm-indicator">
+                    <?php 
+                        
+                        #  Verificamos si hay encuestas disponibles
+                        if (empty($surveys)) {
+                            echo '<div class="col-12 d-flex flex-column justify-content-center align-items-center sigsm-shadow-y-1 p-3 gap-2" style="height: auto;">
+                                    <h5 class="rounded text-center d-block text-center" style="background-color: rgb(157, 177, 253); color: rgb(64, 70, 249); ">No hay encuestas disponibles</h5>
+                                    <p style="color: rgb(168, 168, 168); font-weight: 300;">No se han encontrado encuestas disponibles para tu usuario. Escanea un código QR para acceder a las encuestas disponibles.</p>
+                                </div>';
+                        } else {
+                            #  Mostramos las encuestas disponibles
+                            foreach ($surveys as $survey):
+                            ?>
+                            <a href="./redirect.php?token=<?= $survey['token_categoria'] ?>" class="col-10 d-flex flex-row category-link sigsm-shadow-y-1 sigsm-indicator">
 
-                        <!-- Imagen -->
-                        <div class="col-6 d-flex flex-column align-items-center justify-content-center" style="overflow: hidden;">
-                            <img style="col-12" src="<?= $repositorio ?>assets/img/example1.jpg" style="background-size: cover; background-position: center; max-height: 130px; object-fit: cover;">
-                        </div>
+                                <!-- Imagen -->
+                                <div class="col-6 d-flex flex-column align-items-center justify-content-center" style="overflow: hidden;">
+                                    <img style="col-12" src=" <?= $assets ?>/img/example1.jpg" style="background-size: cover; background-position: center; max-height: 130px; object-fit: cover;">
+                                </div>
 
-                        <div class="col-6 d-flex flex-column justify-content-center align-items-center">
-                            <h5>Servicio medico<h5>
-                        </div>
-                    </a>
-
-                    <!-- Enlace -->
-                    <a href="#" class="col-11 col-md-6 d-flex flex-row category-link sigsm-shadow-y-1 sigsm-indicator">
-
-                        <!-- Imagen -->
-                        <div class="col-6 d-flex flex-column align-items-center justify-content-center" style="overflow: hidden;">
-                            <img style="col-12" src="<?= $repositorio ?>assets/img/example1.jpg" style="background-size: cover; background-position: center; max-height: 130px; object-fit: cover;">
-                        </div>
-
-                        <div class="col-6 d-flex flex-column justify-content-center align-items-center">
-                            <h5>Servicio medico<h5>
-                        </div>
-                    </a>
-
-                    <!-- Enlace -->
-                    <a href="#" class="col-11 col-md-6 d-flex flex-row category-link sigsm-shadow-y-1 sigsm-indicator">
-
-                        <!-- Imagen -->
-                        <div class="col-6 d-flex flex-column align-items-center justify-content-center" style="overflow: hidden;">
-                            <img style="col-12" src="<?= $repositorio ?>assets/img/example1.jpg" style="background-size: cover; background-position: center; max-height: 130px; object-fit: cover;">
-                        </div>
-
-                        <div class="col-6 d-flex flex-column justify-content-center align-items-center">
-                            <h5>Servicio medico<h5>
-                        </div>
-                    </a>
+                                <!-- Titulo -->
+                                <div class="col-6 d-flex flex-column justify-content-center align-items-center">
+                                    <h5> <?= $survey['nombre_categoria'] ?> </h5>
+                                </div>
+                            </a>
+                            <?php
+                            endforeach;
+                        }
+                    ?>
                 </div>
 
                 <!-- Informacion -->
-                <div class="col-12 col-md-4 justify-content-center sigsm-shadow-y">
-                    <div class="col-11 sigsm-indicator"></div>
+                <div class="col-11 col-md-5 d-flex justify-content-sm-center align-items-md-start sigsm-shadow-y">
+                    <div class="col-11 sigsm-indicator sigsm-shadow-y-1 p-3 gap-2" style="height: auto;">
+                        <h5 class="rounded text-center d-block text-center" style="background-color: rgb(157, 177, 253); color: rgb(64, 70, 249); ">Acerca</h5>
+                        <p style="color: rgb(168, 168, 168); font-weight: 300;">En esta página encontrarás todas las encuestas que tienes disponibles. Cuando escaneas un código QR, la aplicación te redirigirá a esta página y te enseñará todos los servicios disponibles para reseñar según los QR que hayas escaneado.</p>
+                    </div>
                 </div>
             </div>
         </main>

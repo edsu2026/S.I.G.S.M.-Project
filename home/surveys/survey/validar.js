@@ -38,9 +38,9 @@ formulary.addEventListener('submit', (event) => {
     }
 
     /* Obtenemos el valor que el usuario ingresó (dentro del rango 1-5) */
-    const radioQuestion2 = document.querySelector("input[name='question-1-input']:checked");
+    const radioQuestion2 = document.querySelector("input[name='question-2-input']:checked");
 
-    /* Si el usuario no respondió la pregunta 1, se cancelará el envío */
+    /* Si el usuario no respondió la pregunta 2, se cancelará el envío */
     if (!radioQuestion2) {
         /**
          * Prevenimos el envío
@@ -51,10 +51,10 @@ formulary.addEventListener('submit', (event) => {
         return;
     }
 
-    /* Si el usuario no respondió la pregunta 1, se cancelará el envío */
-    const radioQuestion3 = document.querySelector("input[name='question-1-input']:checked");
-
-    /* Si el usuario no respondió la pregunta 1, se cancelará el envío */
+    /* Obtenemos el valor que el usuario ingresó (dentro del rango 1-5) */
+    const radioQuestion3 = document.querySelector("input[name='question-3-input']:checked");
+    
+    /* Si el usuario no respondió la pregunta 3, se cancelará el envío */
     if (!radioQuestion3) {
         /**
          * Prevenimos el envío

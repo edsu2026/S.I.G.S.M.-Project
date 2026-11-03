@@ -135,7 +135,7 @@
                     $sql->bindParam(":id", $document_id, PDO::PARAM_INT);
                     $sql->execute();
 
-                    //  glob otiene cualquier archivo que cumpla con determinado patrón que se pasa como parámetro.
+                    //  glob obtiene cualquier archivo que cumpla con determinado patrón que se pasa como parámetro.
                     //  El parametro que se le pasa es:
                     /**
                      *  1)  Que exista dentro de la carpeta "files/documents"
@@ -146,7 +146,7 @@
 
                     //  Eliminamos el archivo de la carpeta
                     if (!unlink($document_file[0])) {
-                        toPanel('El archivo perteneciente al documento ' . $document_id . ' no se pudo eliminar');
+                        die('El archivo perteneciente al documento ' . $document_id . ' no se pudo eliminar');
                     }
                     break;
                 default:

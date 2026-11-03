@@ -7,8 +7,10 @@
     $assets = $repositorio . 'assets';
     $home = $repositorio . 'home';
 
-    if (!isset($_COOKIE['category_id'])) {
-        die('Se necesita una cookie para poder enviar una reseña');
+    # Validamos el tipo de metodo (post);
+    if (!isset($_COOKIE['SELECTED_SURVEY'])) {
+        echo 'No se ha seleccionado una encuesta.';
+        exit();
     }
 ?>
 
@@ -46,7 +48,7 @@
         <main class="row d-flex flex-column justify-content-center align-items-center main-mt">
             <div id="content-info" class="d-flex col-12 flex-column flex-md-row justify-content-center align-items-center gap-4 gap-md-5 col-lg-row">
                 <!-- Card de explicación de reseñas -->
-                <div class="col-12 col-md-5 d-flex flex-column gap-5 gap-md-3" style="border: 2px solid rgba(116, 116, 116, 0.2); border-bottom: 10px solid rgb(32, 89, 246); border-radius: 20px; overflow: hidden; height: 310px";>
+                <div class="col-12 col-md-5 d-flex flex-column gap-5 gap-md-3 sigsm-shadow-y-1" style="border: 2px solid rgba(116, 116, 116, 0.2); border-bottom: 10px solid rgb(32, 89, 246); border-radius: 20px; overflow: hidden; height: 310px";>
                     <!-- Imagen -->
                     <div class="col-12" style="max-height: 120px; border-radius: 20px;">
                         <img class="col-12" src="<?= $repositorio ?>/assets/img/example1.jpg" style="background-size: cover; background-position: center; max-height: 130px; object-fit: cover;">
@@ -57,21 +59,24 @@
                         <p style="margin-left: 5px; color: rgb(168, 168, 168); font-weight: 300;">Las reseñas ayudan al Hospital de Clínicas a mejorar sus servicios</p>
                     </div>
                 </div>
-                <!-- Card de explicación de encuestas -->
-                <div class="col-12 col-md-5 d-flex flex-column gap-5 gap-md-3" style="border: 2px solid rgba(116, 116, 116, 0.2); border-bottom: 10px solid rgb(32, 89, 246); border-radius: 20px; overflow: hidden; height: 310px";>
+                <!-- Card de explicación de anonimato -->
+                <div class="col-12 col-md-5 d-flex flex-column gap-5 gap-md-3 sigsm-shadow-y-1" style="border: 2px solid rgba(116, 116, 116, 0.2); border-bottom: 10px solid rgb(32, 89, 246); border-radius: 20px; overflow: hidden; height: 310px";>
                     <!-- Imagen de la card -->
                     <div class="col-12" style="max-height: 120px; border-radius: 20px;">
                         <img class="col-12" src="<?= $repositorio ?>/assets/img/example1.jpg" style="background-size: cover; background-position: center; max-height: 130px; object-fit: cover;">
                     </div>
                     <!-- Contenedor de la información de la card -->
-                    <div class="col-12 p-4">
-                        <h5 class="rounded" style="margin-left: 5px; padding: 5px 5px; font-weight: 600; background-color: rgba(103, 32, 246, 0.4); color: rgb(73, 1, 110);">Encuesta</h5>
+                    <div class="col-12 p-4" style="background-color: rgba(32, 89, 246, 0.05); border-radius: 10px;">
+                        <h5 class="rounded" style="margin-left: 5px; padding: 5px 5px; font-weight: 600; background-color: rgba(103, 32, 246, 0.4); color: rgb(73, 1, 110);">Anonimato</h5>
                         <p style="margin-left: 5px; color: rgb(168, 168, 168); font-weight: 300;">Son completamente anónimas, por lo tanto, no se le solicitará información personal.</p>
                     </div>
                 </div>
             </div>
+
+            <hr class="my-5" style="width: 90%; border: 1px solid rgba(116, 116, 116, 1);">
+
             <!-- Contenedor de preguntas -->
-            <form action="<?= $repositorio ?>php/modules/manage/survey.php" method="POST" id="content-questions" class="col-12 d-flex flex-column justify-content-center align-items-center p-5 gap-5 mt-1">
+            <form action="<?= $repositorio ?>php/modules/manage/survey.php" method="POST" id="content-questions" class="col-12 d-flex flex-column justify-content-center align-items-center p-5 gap-5">
                 <!-- Atencion -->
                 <div id="content-questions-question-1" class="col-12 col-md-11 d-flex flex-column justify-content-center align-items-center" style="color: rgba(177, 177, 177, 1)">
                     <h3 class="position-absoulte top-0 start-0" style="color: rgba(0, 0, 0, 0.8);">Atención al cliente</h3>
@@ -137,12 +142,12 @@
                         <h5 style="font-weight: 400; color: rgba(116, 116, 116, 0.5); font-size: 16px; margin: 0;">Atención</h5>
                     </div>
                     <!-- Respuesta -->
-                     <div class="d-flex flex-column justify-content-center align-items-center sigsm-shadow-y-1 p-4 sigsm-indicator">
+                    <div class="d-flex flex-column justify-content-center align-items-center sigsm-shadow-y-1 p-4 sigsm-indicator">
                         <p id="answer-velocidad" style="font-weight: 600; color: rgba(116, 116, 116, 0.75); font-size: 60px; margin: 0;">0</p>
                         <h5 style="font-weight: 400; color: rgba(116, 116, 116, 0.5); font-size: 16px; margin: 0;">Respuesta</h5>
                     </div>
                     <!-- Condiciones y calidad -->
-                     <div class="d-flex flex-column justify-content-center align-items-center sigsm-shadow-y-1 p-4 sigsm-indicator">
+                    <div class="d-flex flex-column justify-content-center align-items-center sigsm-shadow-y-1 p-4 sigsm-indicator">
                         <p id="answer-condiciones" style="font-weight: 600; color: rgba(116, 116, 116, 0.75); font-size: 60px; margin: 0;">0</p>
                         <h5 style="font-weight: 400; color: rgba(116, 116, 116, 0.5); font-size: 16px; margin: 0;">Condiciones</h5>
                     </div>
