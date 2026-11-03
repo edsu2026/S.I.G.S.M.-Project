@@ -40,7 +40,6 @@
 - [🖥 Máquina Virtual (OVA)](#-máquina-virtual-ova)
 - [🐧 Sistemas Operativos y Seguridad (ASO)](#-sistemas-operativos-y-seguridad-aso)
 - [🚀 Instalación y Despliegue](#-instalación-y-despliegue)
-- [⚠️ Limitaciones Técnicas y Consideraciones Importantes](#️-limitaciones-técnicas-y-consideraciones-importantes)
 - [📌 Estado Actual del Proyecto](#-estado-actual-del-proyecto)
 
 ---
@@ -65,7 +64,7 @@
 1. **Una aplicación web PHP/MySQL** orientada a dos grupos de usuarios: el **paciente** (que consulta documentos y completa encuestas de reseña de forma anónima mediante códigos QR) y el **personal administrativo/administrador** (que gestiona categorías, documentos y cuentas desde un panel de administración).
 2. **Una suite de scripts Bash** para la administración, el endurecimiento (hardening), el respaldo y la auditoría del servidor Ubuntu sobre el que se despliega la aplicación.
 
-> **Nota importante:** este repositorio corresponde a la versión **non-stable** del proyecto (rama de desarrollo). Refleja el estado real del código fuente tal como se describe a continuación: varios componentes funcionan de punta a punta (flujo de encuestas por QR, gestión de documentos, panel de estadísticas) y otros quedaron a mitad de camino (gestión de cuentas desde el panel, módulos `gestion_*`). Cada uno se marca claramente en su sección.
+Este repositorio corresponde a la rama de desarrollo (**non-stable**) del proyecto: el flujo de encuestas por QR, la gestión de documentos y el panel de administración funcionan de punta a punta, mientras que otras partes (como la gestión de cuentas desde el panel) todavía están en construcción. En la [sección de Estado Actual](#-estado-actual-del-proyecto) se detalla qué está listo y qué falta.
 
 ---
 
@@ -96,7 +95,7 @@ La aplicación web está desarrollada en **PHP 8 procedural, sin framework**, co
 
 ### Patrón general de las páginas
 - Cada página PHP es un documento HTML completo generado del lado del servidor: **no existe un sistema de plantillas ni de rutas centralizadas**; cada página construye su propio `<head>` y redacción de rutas relativas (`../../`).
-- Los **formularios** apuntan a los módulos de `php/modules/`, que procesan el `POST`, ejecuten lo que corresponda contra la base de datos y terminan con una redirección `header("Location: ...")` de regreso a la página que origina la acción.
+- Los **formularios** apuntan a los módulos de `php/modules/`, que procesan el `POST`, ejecutan lo que corresponda contra la base de datos y terminan con una redirección `header("Location: ...")` de regreso a la página que originó la acción.
 - El **panel de administración** (`dashboard/panel/page.php`) funciona como una **SPA por secciones**: una única página que carga todo el contenido de la BD y lo inyecta en variables globales de JavaScript, cediendo al navegador la alternancia visual entre pestañas sin recargar la página.
 
 ### Separación de responsabilidades (frontend / backend)
@@ -114,7 +113,7 @@ El único componente con lógica de negocio reutilizable es `php/conexion.php`. 
 ```text
 S.I.G.S.M.-Project/
 ├── README.md                          # Documentación del proyecto (este archivo, versión (2))
-├── validar.js                         # Validaciones client-side de la maqueta histórica del panel (sin uso activo)
+├── validar.js                         # Validaciones de la maqueta previa del panel (quedó en la raíz)
 │
 ├── home/                              # SITIO PÚBLICO (pacientes)
 │   ├── .htaccess                      # Reescritura de URLs (oculta la extensión .php)
@@ -140,10 +139,10 @@ S.I.G.S.M.-Project/
 │   │   └── *.css                      # CSS específico del panel (buttongroup, div-content, table)
 │   └── manage/                        # Formularios de gestión
 │       ├── account/
-│       │   ├── page.php               # Interfaz multivista de cuentas (MAQUETA en desarrollo)
+│       │   ├── page.php               # Interfaz multivista de cuentas (en desarrollo)
 │       │   └── config.js              # Conmutador de vistas de la interfaz de cuentas
 │       ├── category/
-│       │   └── page.php               # Detalle de categoría (?cat_id=N) con backend inexistente
+│       │   └── page.php               # Detalle de categoría (?cat_id=N) (en desarrollo)
 │       ├── document/
 │       │   └── page.php               # Alta/actualización de documentos (funcional)
 │       └── survey/
@@ -195,7 +194,7 @@ S.I.G.S.M.-Project/
     └── (.OVA) De VM.txt.txt           # Enlace de descarga de la máquina virtual Ubuntu Server
 ```
 
-> **Corrección respecto de versiones anteriores de esta documentación:** los archivos `index.html` y `adminpanel.html` y la carpeta `src/` **ya no existen** en el proyecto; toda referencia a ellos fue eliminada. `validar.js` (raíz) sí existe y hoy solo es cargado por `home/documents/page.php`, pero corresponde a la maqueta previa del panel en HTML plano (sus funciones trabajan contra IDs que ya no existen), por lo que carece de efecto real sobre las páginas actuales.
+> Los archivos `index.html`, `adminpanel.html` y la carpeta `src/` que aparecían en prototipos anteriores ya no forman parte del proyecto. `validar.js` (raíz) es lo único que quedó de esa maqueta: hoy lo carga `home/documents/page.php`, pero sus funciones validan contra IDs que ya no existen, así que no tienen efecto real.
 
 ---
 
@@ -209,8 +208,6 @@ Es el **único punto de conexión** de todo el sistema. Crea un objeto **PDO** h
 
 En caso de falla muestra `Error de conexión: <mensaje>`. Todos los módulos hacen `require` de este archivo; **ningún otro componente abre conexiones propias**.
 
-> ⚠️ Las credenciales están escritas directamente en el archivo (sin archivo `.env` ni configuración externa). Esto está contemplado para el entorno académico, pero es una consideración a tener en cuenta en producción (ver [Limitaciones](#️-limitaciones-técnicas-y-consideraciones-importantes)).
-
 ### Roles de usuario y sus permisos
 El sistema define **tres roles**, almacenados como texto en la columna `usuario.rol`:
 
@@ -220,8 +217,8 @@ El sistema define **tres roles**, almacenados como texto en la columna `usuario.
 | `administrador` | Sí (obligatorio para panel) | Sesión PHP | Panel de administración completo en `dashboard/`. | Redirigido a `dashboard/panel/page.php`. |
 | `administrativo` | Sí (obligatorio para panel) | Sesión PHP | Panel de administración completo en `dashboard/`. | Redirigido a `dashboard/panel/page.php` (mismo destino que administrador; no hay pantallas diferenciadas por rol administrativo). |
 
-- **No existe control de sesión dentro de las páginas** del panel: el panel y sus formularios de gestión no verifican `$_SESSION` actualmente; la protección por rol se concreta únicamente en que la redirección post-login lleva al panel a los roles de staff. Ver [Limitaciones](#️-limitaciones-técnicas-y-consideraciones-importantes).
-- **La sección `# log out` está vacía**: el módulo `php/modules/user/account.php` define el marcador de cierre de sesión, pero no tiene ninguna implementación todavía.
+- El panel y sus formularios todavía **no verifican la sesión**: de momento la única tranca es la redirección post-login según el rol. Aplicar el chequeo de `$_SESSION` dentro de las páginas queda como tarea pendiente.
+- **El cierre de sesión está previsto pero sin implementar**: el módulo de usuario deja marcada la sección `# log out` sin lógica, y el botón del panel todavía no va a ninguna parte.
 
 ### Módulos del Backend (`php/modules/`)
 
@@ -235,13 +232,13 @@ Los módulos se procesan **exclusivamente por `POST`** (excepto indicación cont
 | Lógica | 1) Busca el usuario por `email` en `usuario`. 2) Calcula el pre-hash de la contraseña ingresada: `base64_encode(hash('sha256', $password, true))`. 3) Lo verifica con `password_verify()` contra el hash guardado en `contraseña`. 4) Si es correcto, abre la sesión y guarda `id_user`, `rol` y `nombre`. 5) Redirige según rol: `paciente` → `home/main`, `administrador`/`administrativo` → `dashboard/panel/page.php`. |
 | Errores | Muestra "Contraseña incorrecta." o "El correo electrónico no está registrado." (en texto plano, sin redirección). |
 
-> ⚠️ **Observaciones verificadas en el código:** (a) la sesión guarda `$usuario['nombre']`, pero la tabla `usuario` **no define** una columna `nombre` (solo `id_user, email, contraseña, rol, activo`); (b) el esquema de hash del login **no coincide** con el que usa `php/modules/manage/account.php` al crear cuentas (ver sección de módulos y Limitaciones).
+> Dos detalles a tener en cuenta: la sesión guarda `$usuario['nombre']`, pero la tabla `usuario` todavía no define esa columna (habría que agregarla al esquema), y el esquema de hash que usa el login todavía no coincide con el del alta de cuentas, algo a unificar más adelante.
 
 #### `php/modules/manage/category.php` — Categorías
 | Aspecto | Detalle |
 | :--- | :--- |
 | Acciones implementadas | `create`, `update` |
-| `create` | Valida el nombre (función `category_name_isvalid()`: 6–32 caracteres, solo letras/espacios/tildes con regex Unicode; rechaza vacío y excede largo). Genera el **token de categoría** con `bin2hex(random_bytes(32))` (64 caracteres hexadecimales aleatorios, es el valor que viaja dentro de los códigos QR). Inserta en `categoria`. |
+| `create` | Valida el nombre (función `category_name_isvalid()`: 6–32 caracteres, solo letras/espacios/tildes con regex Unicode; rechaza vacío y nombres fuera de ese rango). Genera el **token de categoría** con `bin2hex(random_bytes(32))` (64 caracteres hexadecimales aleatorios, es el valor que viaja dentro de los códigos QR). Inserta en `categoria`. |
 | `update` | Valida el nuevo nombre con la misma función y ejecuta `UPDATE categoria SET nombre_categoria = ... WHERE id_categoria = :id`. |
 | Redirección | Siempre vuelve a `dashboard/panel/page.php`. |
 | No implementado | `delete` y `deactivate`: el panel dibuja botones con `accion=delete` / `accion=deactivate` y `php/modules/manage/survey.php` tiene un `case 'delete'` vacío, pero en `category.php` esas acciones caen al `default` y **no ejecutan nada** (solo redirigen). |
@@ -252,7 +249,7 @@ Los módulos se procesan **exclusivamente por `POST`** (excepto indicación cont
 | Acciones implementadas | `create` |
 | `create` | Recibe `account-email-input`, `account-password-input`, `account-role-input`. Valida: (a) contraseña con `password_is_valid()`: mínimo 8 caracteres, con mayúscula, minúscula, número y caracter especial; (b) email con `FILTER_VALIDATE_EMAIL`; (c) rol dentro de la lista blanca `$permitted_roles = ['administrador', 'administrativo']` (normalizada a minúsculas). |
 | Almacenamiento | `password_hash($account_password, PASSWORD_DEFAULT)` insertado en `usuario`. |
-| No implementado | Actualización, activación/desactivación y eliminación de cuentas (la interfaz multivista de `dashboard/manage/account/` los dibuja, pero su backend `php/gestion_cuentas.php` **no existe**). |
+| No implementado | Actualización, activación/desactivación y eliminación de cuentas (la interfaz de `dashboard/manage/account/` los dibuja, pero su backend quedó sin implementar). |
 
 #### `php/modules/manage/document.php` — Documentos
 | Aspecto | Detalle |
@@ -270,11 +267,11 @@ Los módulos se procesan **exclusivamente por `POST`** (excepto indicación cont
 | :--- | :--- |
 | Acciones implementadas | `submit` (y `delete` declarado pero vacío) |
 | `submit` | Lee el token desde la cookie `SELECTED_SURVEY` (si está vacía, corta). Recibe `question-1-input`, `question-2-input`, `question-3-input` (escala 1–5). Valida que las tres respuestas existan, resuelve la categoría por `token_categoria` y ejecuta `INSERT INTO reseña (id_categoria, atención, tiempo, condiciones)`. Al terminar, **borra la cookie** `SELECTED_SURVEY` (`time() - 3600`) y redirige a `home/main`. |
-| Criterios | La tabla `reseña` define 4 criterios (`atención`, `tiempo`, `profesionalismo`, `condiciones`), pero el formulario y el módulo trabajan con **3 preguntas/3 columnas**; `profesionalismo` no se completa (ver Limitaciones). |
+| Criterios | La tabla `reseña` define 4 criterios (`atención`, `tiempo`, `profesionalismo`, `condiciones`), pero el formulario y el módulo trabajan con **3 preguntas/3 columnas**; `profesionalismo` todavía no se completa (queda anotado en el Estado Actual). |
 | Resultado | Muestra "Respuestas guardadas correctamente." por `echo` antes de la redirección. |
 
 ### Carpetas reservadas
-- `php/instances/` contiene tres archivos **vacíos** (`administrative.php`, `administrator.php`, `patient.php`): es la estructura reservada para futuras instancias/clases por rol. **No hay código implementado** dentro y ningún componente los referencia.
+- `php/instances/` contiene tres archivos vacíos (`administrative.php`, `administrator.php`, `patient.php`): es la estructura reservada para instancias/clases por rol. Todavía no hay código dentro y ningún componente los referencia.
 
 ---
 
@@ -283,7 +280,7 @@ Los módulos se procesan **exclusivamente por `POST`** (excepto indicación cont
 ### `home/main.php` — Página de inicio (landing)
 Landing con el encabezado azul fijo (`#header-main`, con dos niveles: franja superior con la marca "Hospital de Clínicas" y "Iniciar sesión", y franja secundaria con enlaces de navegación), dos botones-card (apuntando de forma conceptual a **Documentos** y **Encuestas** con descripciones de relleno "Hola"), un banner de **campaña** con sobreimpresión al pasar el mouse (`card-custom.css`) y un pie de página institucional (E.D.S.U. / Hospital de Clínicas / © 2026). No consulta la base de datos: todo el contenido es estático.
 
-> Los enlaces del encabezado (`Redirecciones`, `Preguntas`, `Campañas`, `Acerca de`) apuntan a `#` (placeholder) y los botones principales no tienen destino definido todavía; el acceso real a las secciones se hace por URL directa.
+Los enlaces del encabezado (`Redirecciones`, `Preguntas`, `Campañas`, `Acerca de`) siguen como marcadores (`#`) y los botones principales aún no tienen destino: por ahora el acceso a cada sección se hace por URL directa.
 
 ### `home/login/page.php` — Inicio de sesión
 Página con el mismo encabezado fijo y un contenedor dividido: formulario de login (email + contraseña, método `POST` a `php/modules/user/account.php` con el botón `action=login`) y un panel derecho vacío con borde (diseño pendiente de terminación). Carga además `styles/input.css` y `login_sistema.css`.
@@ -297,7 +294,7 @@ Página de prueba (`login-wrapper` / `login-left` / `login-overlay` / `login-box
 3. Muestra mensajes de vacío ("No hay documentos en esta categoría", "No hay categorías disponibles").
 4. Carga el layout alternativo con fondo `index-bg.jpg` (encabezado/tiempo compacto con clases `mini`/`frame`) y el script raíz `validar.js`.
 
-> ⚠️ **Verificado en el código:** esta página usa `require "php/conexion.php"` con ruta relativa **incorrecta** (el archivo real está en `../../php/conexion.php`), por lo que en un despliegue web normal la página emite un warning/fatal al buscarlo y no renderiza su contenido. Además, su navegación interna enlaza a `index.html`, `encuestas.php` y `preguntas.html`, **archivos que no existen** en el proyecto y a `styles/paddings.css`, una hoja que **también falta**. Detalles completos en [Limitaciones](#️-limitaciones-técnicas-y-consideraciones-importantes).
+> *Pendiente en esta página:* el `require` de la conexión quedó con una ruta relativa vieja (`php/conexion.php` en lugar de `../../php/conexion.php`), los enlaces del menú apuntan a páginas del prototipo anterior (`index.html`, `encuestas.php`) y la hoja `paddings.css` que carga no está en el proyecto. Es la página que más le falta terminar del lado del servidor.
 
 ### `home/surveys/page.php` — Listado de encuestas disponibles
 1. Lee la cookie `AVAILABLE_SURVEYS` (JSON con tokens). Si no hay cookie o está vacía, muestra el mensaje "No hay encuestas disponibles... Escanea un código QR...".
@@ -338,7 +335,7 @@ flowchart LR
 5. `home/surveys/survey/page.php` muestra el formulario; `inputs.js` refleja la respuesta en los contadores y `validar.js` cancela el submit con alertas ("Responda la pregunta N") si falta alguna respuesta.
 6. `php/modules/manage/survey.php` (acción `submit`) valida el token contra la BD, inserta la reseña y **elimina la cookie de selección** (el paciente queda listo para otra encuesta si vuelve a escanear otro QR).
 
-> Los tokens de categoría se generan automáticamente al crear cada categoría desde el panel (`bin2hex(random_bytes(32))`, 64 caracteres). El equipo los convierte en códigos QR físicos por fuera del sistema (no hay módulo de generación de QR implementado).
+> Los tokens de categoría se generan automáticamente al crear cada categoría desde el panel (`bin2hex(random_bytes(32))`, 64 caracteres). El equipo los convierte en códigos QR físicos por fuera del sistema por ahora.
 
 ---
 
@@ -360,7 +357,7 @@ Secciones del panel:
 | `content-categories` | `option-categories` (por defecto, visible) | Formulario **Crear categoría** (nombre → `php/modules/manage/category.php` con `accion=create`). Al elegir una categoría del selector lateral (`categories.js`): muestra su nombre, **el token completo** (para armar el QR), habilita el renombrado (form con `accion=update` y el `id` en un input oculto), enlaza a "Crear documento" (→ `dashboard/manage/document/page.php?accion=create&id_categoria=N`), arma la **tabla de documentos** de la categoría con badge `Activo`/`Inactivo` y enlace "Editar" por documento, y calcula/arma las **estadísticas de reseñas**. |
 | `content-accounts` | `option-accounts` | Formulario de **creación de cuentas** (email + contraseña con `required` + rol con `<datalist>` Administrador/Administrativo y `autocomplete=off`); POST a `php/modules/manage/account.php` (`accion=create`). Incluye una nota de políticas de contraseña. |
 | `content-events` | `option-events` | **Vacío**: contenedor `content-events` sin contenido implementado. |
-| `option-logout` | Cerrar sesión | Botón presentes, pero **no existe implementación de cierre de sesión** (la sección `# log out` de `php/modules/user/account.php` está vacía). |
+| `option-logout` | Cerrar sesión | Botón presente, todavía sin implementación de cierre de sesión. |
 
 **Estadísticas de reseñas** (calculadas **en el cliente** por `categories.js`, no en SQL):
 - **Cantidad** de reseñas de la categoría (`sigsm-indicator` grande con el número).
@@ -368,21 +365,21 @@ Secciones del panel:
 - **Tres barras de progreso** (Bootstrap `progress`) de Atención / Tiempo / Condiciones, con ancho `(promedio / 5) * 100%`.
 - Si la categoría no tiene reseñas, las estadísticas se ocultan (`d-none`).
 
-> Los botones "Desactivar" y "Eliminar" del formulario de categoría renombrada apuntan con `accion=deactivate`/`accion=delete` a `php/modules/manage/category.php`, pero **ese módulo no implementa esas acciones** (caen al `default` y solo redirigen): la baja/eliminación de categorías queda pendiente en el backend.
+Los botones "Desactivar" y "Eliminar" de la categoría ya renombrada todavía no tienen efecto: el módulo de categorías solo atiende `create` y `update`, así que esas dos acciones solo redirigen de vuelta al panel. La baja y eliminación de categorías quedan pendientes en el backend.
 
 ### Formularios de gestión — `dashboard/manage/`
 
-| Página | Estado real | Función |
+| Página | Estado | Función |
 | :--- | :--- | :--- |
-| `dashboard/manage/document/page.php` | ✅ **Funcional** | Sólo accesible por `GET` con `?accion=create&id_categoria=N` (vuelve el formulario de alta: nombre + archivo, `POST` con `enctype=multipart/form-data` al módulo real `php/modules/manage/document.php`) o `?accion=update&id_documento=N` (consulta el documento en la BD y muestra tres columnas: **Estado** — botón Activar/Desactivar según `activo` + Eliminar —, formulario de **actualización** — nuevo nombre + nuevo archivo — y **Propiedades** — id, estado con badge, categoría). Es el flujo de alta/edición que dispara `categories.js` desde el panel. |
-| `dashboard/manage/account/page.php` | ⚠️ **Maqueta en desarrollo** | Interfaz multivista (Crear / Actualizar / Activar / Eliminar) conmutable por su propio `config.js`, con buscador con panel de sugerencias (sugerencias y card de información son **datos demo hardcodeados**, no consultan la BD). ⚠️ Sus formularios apuntan a `php/gestion_cuentas.php` y el retorno al panel a `dashboard/modules/admin/panel.php`, **archivos que no existen** (ver Limitaciones). |
-| `dashboard/manage/category/page.php` | ⚠️ **Detalle parcial** | Accesible por `GET` con `?cat_id=N`, **consulta real** a la BD (devuelve JSON de error y corta si el método/parámetro/categoría no son válidos) y muestra id + nombre actual con un formulario para actualizar/eliminar. ⚠️ Su formulario apunta a `php/gestion/gestion_cat.php` y su retorno al panel a `panel/adminpanel.php`, **archivos que no existen**; además está sin cerrar el `<main>` (el `</main>` real cierra mal en `documents/page.php`, esta página tiene el `main` mal cerrado en `</footer>` por una etiqueta desplazada). Las acciones reales de categoría viven en el módulo `php/modules/manage/category.php` (create/update). |
-| `dashboard/manage/survey/page.php` | 🧱 **Esqueleto** | Réplica vacía del layout de gestión de documentos: exige `GET` con `accion`, pero no dibuja vistas ni formularios (el "main" está vacío). Es un andamio para la futura gestión de encuestas. |
+| `dashboard/manage/document/page.php` | **Funcional** | Solo accesible por `GET` con `?accion=create&id_categoria=N` (se muestra el formulario de alta: nombre + archivo, `POST` con `enctype=multipart/form-data` al módulo real `php/modules/manage/document.php`) o `?accion=update&id_documento=N` (consulta el documento en la BD y muestra tres columnas: **Estado** — botón Activar/Desactivar según `activo` + Eliminar —, formulario de **actualización** — nuevo nombre + nuevo archivo — y **Propiedades** — id, estado con badge, categoría). Es el flujo de alta/edición que dispara `categories.js` desde el panel. |
+| `dashboard/manage/account/page.php` | **En desarrollo** | Interfaz multivista (Crear / Actualizar / Activar / Eliminar) conmutable por su propio `config.js`, con buscador y sugerencias de ejemplo (datos demo fijos, todavía no consulta la BD). Sus formularios apuntan a una capa de gestión de cuentas (`php/gestion_cuentas.php`) que quedó sin implementar; las acciones vigentes por ahora están en `php/modules/manage/account.php` (alta). |
+| `dashboard/manage/category/page.php` | **En desarrollo** | Accesible por `GET` con `?cat_id=N`, consulta real a la BD (devuelve un JSON de error y corta si el método, el parámetro o la categoría no son válidos) y muestra id + nombre actual con un formulario para actualizar/eliminar. Ese formulario apunta al backend de la primera versión (`php/gestion/gestion_cat.php`), que ya no forma parte del proyecto; las acciones vigentes de categorías viven en `php/modules/manage/category.php` (create/update). |
+| `dashboard/manage/survey/page.php` | **Esqueleto** | Réplica vacía del layout de gestión de documentos: exige `GET` con `accion`, pero todavía no dibuja vistas ni formularios. Quedó como andamio para la futura gestión de encuestas. |
 
 ---
 
 ## ⚡ JavaScript del Proyecto
-El proyecto usa **JavaScript vanilla** (sin libreríasSalvo Bootstrap bundle por CDN, que solo aporta componentes visuales y no lógica propia). Cada script tiene un rol bien delimitado:
+El proyecto usa **JavaScript vanilla** (el único script de afuera es el bundle de Bootstrap por CDN, que solo aporta componentes visuales y no lógica propia). Cada script tiene su rol bien delimitado:
 
 | Archivo | Dónde se carga | Responsabilidad |
 | :--- | :--- | :--- |
@@ -392,7 +389,7 @@ El proyecto usa **JavaScript vanilla** (sin libreríasSalvo Bootstrap bundle por
 | `dashboard/panel/config.js` | Panel principal | Conmutador de pestañas por clases Bootstrap (`d-block`/`d-none` + `on-activate` para la transición de opacidad en `div-content.css`): cambia entre `content-categories`, `content-accounts` y `content-events` sin recargar la página. |
 | `dashboard/panel/categories.js` | Panel principal | El corazón de la sección "Categorías": construye el selector lateral con las categorías inyectadas; al elegir una, renderiza título, **token**, botón "Crear documento", **tabla de documentos** (con badges de estado) y **estadísticas** (cantidad, promedio y barras por criterio) a partir de `window.categories`, `window.reviews` y `window.documents`. También ajusta clases de visibilidad de todos los contenedores (`content-categories-category-selector`, `content-categories-category-unselected`, etc.). |
 | `dashboard/manage/account/config.js` | Interfaz de cuentas (maqueta) | Conmutador análogo entre los formularios `form-create`, `form-update`, `form-activate` y `form-delete`. |
-| `validar.js` (raíz) | Referenciado por `home/documents/page.php` | **Maqueta histórica**: funciones de validación client-side (`validarInicioSolicitud`, `crearCategoria`, `eliminarCategoria`, `crearDocumento`, `actualizarDocumento`, `eliminarDocumento`, `crearEncuesta`, `actualizarEncuesta`, `eliminarEncuesta`) que trabajaban contra los IDs de la maqueta anterior (`inputEmail`, `inputNombreCat`, etc.). **No está enlazado por ninguna página activa del panel actual**; se conserva por si se reimplementa. Sus validaciones de encuesta tratan encuestas por URL (enfoque anterior al actual por tokens). |
+| `validar.js` (raíz) | Cargado por `home/documents/page.php` | Código que quedó de la maqueta anterior del panel: funciones de validación client-side (`validarInicioSolicitud`, `crearCategoria`, `crearDocumento`, `actualizarEncuesta`, etc.) que validan contra IDs que ya no existen, así que en la práctica no tienen efecto. Se conserva por si se reutiliza; sus validaciones de encuesta responden al enfoque anterior (encuestas por URL), previo al actual por tokens. |
 
 > Nota: el combo `document/page.php`/`survey/page.php` de `dashboard/manage/` también carga `buttongroup.css` e `input.css`, y el panel usa su propio CSS local (`buttongroup.css`, `div-content.css`, `table.css` copiados en `dashboard/panel/`).
 
@@ -417,7 +414,7 @@ El proyecto usa **JavaScript vanilla** (sin libreríasSalvo Bootstrap bundle por
 | `dashboard/panel/table.css` | Filas de tabla `.table-tr` (hover celeste, cursor pointer, botones internos transparentes). | Tablas dentro del panel. |
 | `dashboard/panel/div-content.css` | Transición de opacidad de las secciones del panel (`.div-content` / `.on-activate`). | SPA del panel. |
 
-> ⚠️ `styles/paddings.css` es **referenciado** por `home/documents/page.php`, `dashboard/manage/account/page.php` y `dashboard/manage/category/page.php`, pero **el archivo no existe** en el proyecto (ver Limitaciones).
+Ojo: `styles/paddings.css` la cargan `home/documents/page.php`, `dashboard/manage/account/page.php` y `dashboard/manage/category/page.php`, pero el archivo se nos quedó fuera del proyecto.
 
 ---
 
@@ -432,7 +429,7 @@ Esquema completo en `assets/sql/basededatos.sql` — base **`hospital`** (charse
 | `reseña` | `id_reseña` (PK, AI), `id_categoria` (**FK** → `categoria`), `atención`, `tiempo`, `profesionalismo`, `condiciones` (INT, sin rangos forzados) | Reseñas anónimas de los pacientes (escala 1–5, aplicada client-side). |
 | `gestionCat` | `id` (PK, AI), `id_administrador` (**FK** → `usuario`), `id_categoria` (**FK** → `categoria`), `fecha` (DATETIME) | Tabla de auditoría prevista para registrar gestiones de categorías. **Creada, sin uso real** (ningún módulo escribe ni consulta). |
 | `gestionDoc` | `id` (PK, AI), `id_administrador` (**FK** → `usuario`), `id_documento` (**FK** → `documento`), `fecha` | Idem, para gestiones de documentos. **Creada, sin uso real.** |
-| `gestionEnc` | `id` (PK, AI), `id_administrador` (**FK** → `usuario`), `id_encuesta` (INT **sin FK** — no existe tabla `encuesta`), `fecha` | Tabla prevista para gestiones de encuestas. **Creada, sin uso real.** No existe ninguna tabla `encuesta` en el esquema actual: el sistema actual-modela las encuestas sobre la tabla `categoria` (la categoría encuestable). |
+| `gestionEnc` | `id` (PK, AI), `id_administrador` (**FK** → `usuario`), `id_encuesta` (INT **sin FK** — no existe tabla `encuesta`), `fecha` | Tabla prevista para gestiones de encuestas. **Creada, sin uso real.** No hay una tabla `encuesta` en el esquema: el sistema modela las encuestas sobre `categoria` (la categoría encuestable). |
 
 **Relaciones efectivas (FK reales):**
 ```
@@ -443,7 +440,7 @@ gestionCat.id_categoria ──> categoria.id_categoria
 gestionDoc.id_documento ──> documento.id_documento
 ```
 
-**Datos de relleno — `assets/sql/datosRellenoCat.sql`:** inserta 10 especialidades de ejemplo (Oftalmología, Cardiología, Dermatología, Gastroenterología, Neurología, Pediatría, Psiquiatría, Oncología, Endocrinología, Reumatología) con `activo = true`. ⚠️ El `INSERT` **no incluye** la columna `token_categoria` (NOT NULL y UNIQUE en el esquema), por lo que su resultado depende del modo SQL del servidor; de usarse, los tokens deberían completarse después manualmente para poder armar los QR.
+**Datos de relleno — `assets/sql/datosRellenoCat.sql`:** inserta 10 especialidades de ejemplo (Oftalmología, Cardiología, Dermatología, Gastroenterología, Neurología, Pediatría, Psiquiatría, Oncología, Endocrinología, Reumatología) con `activo = true`. El `INSERT` no incluye la columna `token_categoria` (NOT NULL y UNIQUE en el esquema), así que si se usa este script conviene completar los tokens después para poder armar los QR de esas categorías.
 
 ---
 
@@ -473,7 +470,7 @@ Esto permite URLs como `localhost/home/main` (sin `.php`). El sistema lo aprovec
 | `home/surveys/redirect.php` | `home/surveys/survey/page.php` |
 
 ### Convención de rutas relativas
-Cada página calcula su raíz con una variable (`$repositorio = '../../'` según la profundidad), y los módulos lo hacen con `$repository = "../../../"`. No hay un punto único de resolución de rutas, por lo que estas deben mantenerse consistentes cuando se mueve un archivo (ver Limitaciones).
+Cada página calcula su raíz con una variable (`$repositorio = '../../'` según la profundidad), y los módulos lo hacen con `$repository = "../../../"`. No hay un punto único de resolución de rutas, por lo que hay que mantenerlas consistentes a mano cuando se mueve un archivo.
 
 ---
 
@@ -500,17 +497,17 @@ Ambas son la **consola de operador del servidor**: un menú interactivo de **15 
                                   14) Permisos del Directorio de la App · 15) Salir
 ```
 
-### Módulos de la versión final (`ASO-Script/V-Modular-Script/`) — verificados
+### Módulos de la versión final (`ASO-Script/V-Modular-Script/`)
 | Módulo | Funciones (nombres reales en el código) | Descripción |
 | :--- | :--- | :--- |
 | `config/config.sh` | (solo variables) | Rutas y valores compartidos: `DIR_APP=/var/www/html/sigsm`, `DIR_RESPALDOS=/respaldos`, `GRUPO_ADMINISTRADORES=SIGSM-administradores`, `USUARIO_WEB=www-data`, `SSHD_CONFIG=/etc/ssh/sshd_config`. |
 | `001-usuarios.sh` | `crear_usuario`, `eliminar_usuario`, `listar_usuarios_sigsm` | Alta de usuarios con asociación automática al grupo del sistema, contraseña temporal (el propio nombre de usuario) y **`passwd -e`** para forzar el cambio en el primer login. Baja con limpieza total del `/home`. |
 | `002-grupos.sh` | `inicializar_grupos_sistema`, `crear_grupo`, `eliminar_grupo`, `listar_grupos_sigsm` | Administración de grupos con **prefijo obligatorio `SIGSM-`** y listado en tiempo real. |
 | `003-seguridad.sh` | `cifrar_archivo`, `descifrar_archivo`, `hardening_ssh`, `configurar_firewall`, `permisos_directorio_app` | Cifrado simétrico **AES-256 con OpenSSL** (`-salt -pbkdf2`; el original en claro se elimina), hardening completo de `sshd_config` con **validación (`sshd -t`) y rollback automático** del respaldo si falla, firewall **UFW** y permisos `770` sobre `DIR_APP`. |
-| `004-respaldos.sh` | `respaldo_sistema` | Respaldo de `DIR_APP` y `/etc/netplan/` en `tar -czf` con fecha (`backup_sigsm_YYYYMMDD_HHMMSS.tar.gz`), **cifrado al vuelo** (nunca queda resguardo en texto plano) en `DIR_RESPALDOS`. |
+| `004-respaldos.sh` | `respaldo_sistema` | Respaldo de `DIR_APP` y `/etc/netplan/` en `tar -czf` con fecha (`backup_sigsm_YYYYMMDD_HHMMSS.tar.gz`), **cifrado al vuelo** (nunca queda respaldo en texto plano) en `DIR_RESPALDOS`. |
 | `005-monitoreo.sh` | `monitorear_recursos`, `auditoria_accesos` | Uso de disco y RAM, top de procesos por CPU, y últimas entradas de `/var/log/auth.log` + `journalctl -u ssh`. |
 
-### Diferencias de la versión monolítica (`scriptEDSU_V2.sh`) — verificadas
+### Diferencias de la versión monolítica (`scriptEDSU_V2.sh`)
 - Mantiene **dos grupos** para el staff: `SIGSM-administradores` (propietario de la app) y `SIGSM-administrativos` (personal médico/administrativo con acceso operativo), al contrario que la versión final modular que centraliza en un grupo (el personal médico nunca toca el servidor; solo usa el frontend).
 - `crear_usuario` asigna al usuario al grupo según el rol elegido en el menú.
 - Incluye además el banner ASCII propio (`Logo()`) y el mismo flujo de cifrado/respaldo/monitoreo, pero con todas las funciones y el menú reunidos en un solo archivo.
@@ -527,7 +524,7 @@ Se trata de un **Ubuntu Server** ya aprovisionado para el proyecto (despliegue d
 ---
 
 ## 🐧 Sistemas Operativos y Seguridad (ASO)
-La infraestructura del servidor cuenta con seguridad bastamento pulida. La siguiente configuración es la que aplican (o documentan) los scripts de `ASO-Script/` / `Script(SERVIDOR)/` y la VM entregada:
+La infraestructura del servidor tiene una seguridad bastante pulida. La siguiente configuración es la que aplican (o documentan) los scripts de `ASO-Script/` / `Script(SERVIDOR)/` y la VM entregada:
 
 ### 1. Configuración de Red
 - **Adaptador Puente (Bridged):** se usa para trabajar con SSH del PC host a la VM durante el desarrollo.
@@ -606,7 +603,7 @@ Si querés crear categorías de ejemplo para probar la interfaz, ejecutá en la 
 - **Panel:** [http://localhost/dashboard/panel/page.php](http://localhost/dashboard/panel/page.php) (requiere haber iniciado sesión con un rol de staff)
 - **Endpoint QR:** `http://localhost/public/redirect-to-surveys.php?token=<token_de_categoria>`
 
-> ⚠️ Si no importás la base de datos, las páginas que consultan MySQL (`documents`, `surveys`, panel) mostrarán el error de conexión emitido por `php/conexion.php` ("Error de conexión: ... Unknown database 'hospital'"). El flujo de encuestas degrada elegantemente mostrando "No hay encuestas disponibles".
+Si no llega a estar la base de datos importada, las páginas que consultan MySQL (`documents`, `surveys`, panel) van a mostrar el error de conexión de `php/conexion.php` ("Error de conexión: ... Unknown database 'hospital'"). En el flujo de encuestas simplemente aparece el aviso de que no hay encuestas disponibles.
 
 </details>
 
@@ -618,61 +615,20 @@ Si querés crear categorías de ejemplo para probar la interfaz, ejecutá en la 
 
 ---
 
-## ⚠️ Limitaciones Técnicas y Consideraciones Importantes
-> Esta sección documenta, con base en el **código fuente actual**, los puntos que están pendientes, sin implementar o que configuran riesgos conocidos. Se listan tal cual están; **no se corrigen en este documento**, pero quedan identificados con precisión.
-
-### Rutas y archivos inexistentes (referencias rotas, verificadas)
-| Referencia (archivo que la usa) | Apunta a | Estado real |
-| :--- | :--- | :--- |
-| `home/documents/page.php` (línea 2) | `require "php/conexion.php"` (relativa al propio archivo) | ❌ **Fatal en runtime**: el archivo está en `../../php/conexion.php`. Con el servidor web, la página no llega a renderizar (warning + fatal). |
-| `home/documents/page.php` (navegación) | `index.html`, `encuestas.php`, `preguntas.html` | ❌ Enlaces a páginas que **no existen** en el proyecto. |
-| `dashboard/manage/account/page.php` (los 4 formularios) | `php/gestion_cuentas.php` | ❌ Backend **inexistente**; la interfaz de cuentas es solo visual (maqueta). |
-| `dashboard/manage/account/page.php` (header) | `dashboard/modules/admin/panel.php` | ❌ Ruta **inexistente** (el panel real está en `dashboard/panel/page.php`). |
-| `dashboard/manage/category/page.php` (form) | `php/gestion/gestion_cat.php` | ❌ Backend **inexistente** (las acciones reales de categoría están en `php/modules/manage/category.php`, que solo soporta create/update). |
-| `dashboard/manage/category/page.php` (header) | `panel/adminpanel.php` | ❌ Ruta **inexistente**. |
-| `home/documents/page.php`, `dashboard/manage/account/page.php`, `dashboard/manage/category/page.php` | `styles/paddings.css` | ❌ Hoja de estilo **no incluida** en el proyecto. |
-
-### Autenticación y sesiones
-- **No hay validación de sesión en las páginas del panel ni en los módulos de gestión**: cualquier persona con la URL puede abrir `dashboard/panel/page.php` o enviar formularios a los módulos si conoce los campos. El login redirige por rol, pero no protege las páginas.
-- **Esquemas de hash inconsistentes:** el login calcula `password_verify(base64_encode(hash('sha256', $password, true)), hash_guardado)`, mientras que `manage/account.php` guarda `password_hash($password_en_crudo)`. Una cuenta creada desde el panel **no verificaría** en el login con ese esquema (resulta imprescindible unificar el esquema o crear cuentas con el pre-hash correspondiente).
-- **Columna `nombre` inexistente:** la sesión del login guarda `$_SESSION['nombre']` desde `$usuario['nombre']`, pero la tabla `usuario` no define esa columna (se generaría un índice indefinido).
-- **Cierre de sesión no implementado:** el botón `Cerrar sesión` del panel y la sección `# log out` del módulo de usuario no tienen lógica.
-- **Mensaje de error del login verbose:** se revela si el email existe o no ("El correo electrónico no está registrado."), práctica desaconsejada ante enumeración de cuentas.
-
-### Encuestas y base de datos
-- **El campo `profesionalismo` de `reseña` nunca se completa:** el formulario evalúa 3 criterios y el módulo inserta `(id_categoria, atención, tiempo, condiciones)`. La columna es `NOT NULL` sin valor por defecto, por lo que el efecto depende del modo SQL del servidor (en modo estricto esa inserción fallaría). El panel de estadísticas calcula el promedio **usando solo los 3 criterios completados**.
-- **`gestionCat`, `gestionDoc`, `gestionEnc` sin uso:** las tablas de auditoría están creadas pero ningún módulo escribe en ellas. `gestionEnc.id_encuesta`, además, no tiene FK y **no existe una tabla `encuesta`**: el sistema actual modela las "encuestas" sobre `categoria`.
-- **Datos de relleno sin tokens:** `datosRellenoCat.sql` no completa `token_categoria` (NOT NULL/UNIQUE).
-- **No hay generación de QR implementado:** los tokens se crean, pero convertirlos en códigos QR físicos es un paso manual del equipo.
-
-### Frontend
-- **`validar.js` (raíz) es código legado** de la maqueta HTML previa: está referenciado por `home/documents/page.php`, pero sus funciones trabajan sobre IDs de la maqueta que ya no existen, por lo que no tienen efecto actual.
-- **Clases inexistentes/legadas** en el marcado: `mr-1` (Bootstrap 4; en 5.x sería `me-1`) en varios headers; `position-absoulte` (typo de `position-absolute`) en el formulario de encuesta; `col-lg-row` (inexistente); los encabezados `mini`/`frame` no tienen CSS definido en el proyecto.
-- **Botón "Abrir" de documentos sin destino:** en el acordeón de `documents/page.php`, cada documento muestra un **"Abrir"** sin `href` (el enlace físico a `files/documents/<id>.<ext>` no está construido).
-- **Validación duplicada de la encuesta:** `validar.js` valida del lado del cliente y el backend también valida (`if ($answer1 && $answer2...)`), lo que da doble control, aunque el retorno al usuario en el servidor es un mensaje en texto plano.
-- **El panel no redirige por rol ni oculta contenido por rol:** administrador y administrativo comparten la misma pantalla y acciones; el personal administrativo sin restrincciones diferenciadas.
-
-### General
-- **Credenciales de BD en claro** en `php/conexion.php` (root/blank), sin mecanismo de configuración por entorno.
-- **Sin validación server-side del valor numérico (1–5)** de las respuestas de la encuesta (se castean a INT en el bindParam, pero no se acota el rango).
-- **Manejo de errores en pantalla:** varios módulos mezclan `die()`/`echo` con redirecciones, por lo que hay mensajes que pueden renderizarse antes de un `Location:`.
-
----
-
 ## 📌 Estado Actual del Proyecto
 
-### ✅ Implementado y funcional (verificado en el código)
-- Flujo completo de **encuestas por QR** con cookies: registro de token → listado → selección → formulario → inserción de reseña → limpieza de cookie.
-- **Gestión de documentos** completa (alta con archivo físico `<id>.<ext>`, actualización, activar/desactivar, eliminar con `unlink`).
-- **Gestión de categorías** (crear con token aleatorio de 64 caracteres para QR, renombrar).
-- **Panel SPA** con inyección de datos a JavaScript, tabla de documentos por categoría con estado, y **estadísticas de reseñas en vivo** (cantidad, promedio y barras por criterio).
-- **Login** con PDO y sesiones, redirección por rol.
-- **Generación automática de tokens** únicos por categoría, útiles para los QR físicos.
-- Suite completa de **administración del servidor** en dos versiones (modular y monolítica): usuarios, grupos, cifrado OpenSSL, hardening SSH con rollback, UFW, permisos, respaldos cifrados, monitoreo y auditoría.
+### Lo que ya funciona
+- Flujo completo de **encuestas por QR** con cookies: registro del token → listado → selección → formulario → inserción de la reseña → limpieza de la cookie.
+- **Gestión de documentos** completa: alta con su archivo físico (`<id>.<ext>`), actualización, activar/desactivar y eliminar.
+- **Gestión de categorías**: crear (con token aleatorio de 64 caracteres para armar los QR) y renombrar.
+- **Panel tipo SPA** con tabla de documentos por categoría y **estadísticas de reseñas en vivo** (cantidad, promedio y barras por criterio).
+- **Login** con PDO y sesiones, con redirección según el rol.
+- Suite completa de **administración del servidor** en dos versiones (modular y monolítica): usuarios, grupos, cifrado OpenSSL, hardening SSH, UFW, permisos, respaldos cifrados, monitoreo y auditoría.
 
-### 🔧 En desarrollo / pendiente
-- Interfaz de **gestión de cuentas** desde el panel (maqueta sin backend).
-- Backend de **detalle/gestión de categorías** desde `dashboard/manage/category/`.
-- **Esqueleto de gestión de encuestas** (`dashboard/manage/survey/`).
-- **Cierre de sesión**, validación de sesión en páginas, bajas lógicas/eliminación de categorías en el módulo, y unificación del esquema de hash de contraseñas.
-- Reparación de referencias rotas documentadas en la sección de Limitaciones (rutas de `conexion.php`, hoja `paddings.css`, enlaces a páginas eliminadas como `index.html`, etc.).
+### Lo que queda pendiente
+- **Protección por sesión dentro de las páginas del panel** (hoy la única puerta es la redirección del login y los módulos no revalidan nada) y el **cierre de sesión**, que todavía no tiene lógica.
+- **Unificar el esquema de contraseñas**: el login hace un pre-hash (SHA-256 + base64) antes de `password_verify()`, pero el alta de cuentas guarda el hash de la contraseña en crudo, así que una cuenta creada desde el panel no llegaría a iniciar sesión.
+- **Terminar la página de documentos del sitio público** (`home/documents/page.php`): corregir la ruta del `require` de la conexión, sus enlaces (todavía apuntan a `index.html` y otras páginas del prototipo anterior), el botón **"Abrir"** (sin `href` por ahora, falta enlazar el archivo físico) y la hoja `paddings.css` que carga pero quedó fuera del proyecto.
+- **Completar la columna `profesionalismo`** de `reseña` (el formulario solo pregunta 3 criterios) y dar uso a las tablas de auditoría `gestionCat`, `gestionDoc` y `gestionEnc`, que están creadas pero nadie escribe en ellas.
+- **Tokens en `datosRellenoCat.sql`**: si se quiere usar ese relleno para armar QR, hay que completar los `token_categoria` a mano.
+- Limpieza menor: clases heredadas de Bootstrap 4 (`mr-1`), el typo `position-absoulte` en el formulario de encuesta, y las credenciales de la BD escritas directo en `conexion.php` (pensadas para el entorno de XAMPP).
