@@ -60,6 +60,8 @@
 ## 💡 Acerca del Proyecto
 **S.I.G.S.M.** es una plataforma web e infraestructura de servidor diseñada para modernizar, digitalizar y resguardar la información del **Hospital de Clínicas**. El sistema combina dos grandes frentes de trabajo desarrollados por el equipo **E.D.S.U.**:
 
+(Los cambios de la version "v1.2-beta NON-STABLE" no se incluyeron por temas de tiempos)
+
 1. **Una aplicación web PHP/MySQL** orientada a dos grupos de usuarios: el **paciente** (que consulta documentos y completa encuestas de reseña de forma anónima mediante códigos QR) y el **personal administrativo/administrador** (que gestiona categorías, documentos y cuentas desde un panel de administración).
 2. **un conjunto de scripts Bash** para la administración, el endurecimiento (hardening), el respaldo y la auditoría del servidor Ubuntu sobre el que se despliega la aplicación.
 
