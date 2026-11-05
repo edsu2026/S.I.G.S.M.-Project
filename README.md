@@ -379,7 +379,7 @@ Los botones "Desactivar" y "Eliminar" de la categoría ya renombrada todavía no
 ---
 
 ## ⚡ JavaScript del Proyecto
-El proyecto usa **JavaScript vanilla** (el único script de afuera es el bundle de Bootstrap por CDN, que solo aporta componentes visuales y no lógica propia). Cada script tiene su rol bien delimitado:
+El proyecto usa **JavaScript vanilla** (el único script de afuera es el bundle de Bootstrap por CDN. red de servidores que permite utilizar archivos externos, como librerías de JavaScript, CSS, imágenes, etc. Solo aporta componentes visuales y no lógica propia). Cada script tiene su rol bien delimitado:
 
 | Archivo | Dónde se carga | Responsabilidad |
 | :--- | :--- | :--- |
