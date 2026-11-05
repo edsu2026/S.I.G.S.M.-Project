@@ -1,0 +1,47 @@
+.sigsm-buttonsgrp            {
+    display:            flex;
+    flex-direction:     column;
+    align-items:        start;
+}
+
+.sigsm-buttonsgrp button     {
+    color:            rgb(75, 69, 80);
+    text-align:         start;
+    padding:            3px 20px;
+    font-weight:        600;
+    font-size:          14px;
+    border-radius:      7px;
+    border:             none;
+    background-color:   white;
+    transition:
+        background-color .1s ease-out;
+}
+
+.sigsm-buttonsgrp button:hover  {
+    background-color:   rgb(103, 127, 249);
+    color:              rgb(255, 255, 255);
+}
+
+.sigsm-buttonsgrp button:active  {
+    background-color:   rgb(54, 85, 235);
+}
+
+.sigsm-buttonsgrp-bl         {
+    border-left: 3px solid var(--color-gray);
+    transition:
+        border-left .1s ease-out;
+}
+
+.sigsm-buttonsgrp-bl:hover   {
+    border-left: 3px solid var(--color-lightgray);
+}
+
+.sigsm-buttonsgrp-br         {
+    border-right: 3px solid var(--color-gray);
+    transition:
+        border-right .1s ease-out;
+}
+
+.sigsm-buttonsgrp-br:hover   {
+    border-right: 3px solid var(--color-lightgray);
+}

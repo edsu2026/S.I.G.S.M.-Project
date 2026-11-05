@@ -30,7 +30,7 @@
                             <a href="#" class="button button-link">Hospital de Clínicas</a>
                         </span>
                     </div>
-                    <div class="col-6 d-flex flex-row justify-content-end align-items-center mr-1">
+                    <div class="col-6 d-flex flex-row justify-content-end align-items-center me-1">
                         <span>
                             <a href="./login/page.php" class="button button-link">Iniciar sesión</a>
                         </span>
@@ -64,7 +64,7 @@
         <!--
             Contenedor principal
         -->
-        <main class="row d-flex flex-column justify-content-center align-items-center">
+        <main class="row main-mt d-flex flex-column justify-content-center align-items-center">
             <!-- Botones y campañas -->
             <div class="col-12 d-flex flex-column flex-md-row justify-content-center align-items-center gap-3">
                 <!-- Botones -->
@@ -72,12 +72,12 @@
                     <button class="col-12 d-flex flex-row button-card">
                         <!-- Imagen del botón -->
                         <div class="col-4" style="overflow: hidden">
-                            <img src="<?= $assets ?>/img/example1.jpg" style="max-width: 100%; max-height: 100%">
+                            <img src="<?= $assets ?>/img/example1.jpg" class="w-100 h-100 object-fit-cover" alt="Sección">
                         </div>
                         <!-- Contenedor del texto del botón -->
                         <div class="col-8 d-flex flex-column">
                             <h5>Documentos</h5>
-                            <p>Hola</p>
+                            <p>Aca se encuentran los Documentos</p>
                         </div>
                     </button>
 
@@ -85,13 +85,13 @@
                     <button class="col-12 d-flex flex-row button-card">
                         <!-- Imagen del botón -->
                         <div class="col-4" style="overflow: hidden">
-                            <img src="<?= $assets ?>/img/example1.jpg" style="max-width: 100%; max-height: 100%">
+                            <img src="<?= $assets ?>/img/example1.jpg" class="w-100 h-100 object-fit-cover" alt="Sección">
                         </div>
 
                         <!-- Contenedor del texto del botón -->
                         <div class="col-8 d-flex flex-column">
                             <h5>Encuestas</h5>
-                            <p>Hola</p>
+                            <p>Aca se encuentran las Encuestas</p>
                         </div>
                     </button>
                 </div>
@@ -110,7 +110,7 @@
             </div>
             
         </main>
-        <footer class="row theme-darkblue justify-content-center">
+        <footer class="row theme-darkblue justify-content-center mt-auto">
             <!-- Añadido align-items-center y corregido el ancho de columnas si usas d-flex -->
             <div class="col-12 d-flex justify-content-center gap-4 align-items-center">
                 <!-- Eliminados los col-12/col-md-3 para que Flexbox maneje el espacio de forma fluida -->

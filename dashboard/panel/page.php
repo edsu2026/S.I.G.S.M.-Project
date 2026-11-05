@@ -7,6 +7,18 @@
     $assets = $repositorio . 'assets';
     $home = $repositorio . 'home';
 
+    /** SESIÓN
+     *  Reanudamos la sesión ya realizada anteriormente.
+     *  Si id_user dentro de la cookie "$_SESSION" no está declarado, significa que no se inició sesión.
+     *  */  
+    session_start();
+    if (!isset($_SESSION['id_user'])) {
+        /** Terminamos la ejecución del programa
+         *  Se planea que el programa redirija al usuario a una página con un mensaje de error.
+         */
+        header('Location: ' . $home . '/login/page.php');
+    }
+
     # PDO
     require $repositorio . 'php/conexion.php';
 
@@ -29,6 +41,12 @@
     $getDocumentos = $conexion->prepare($documentosQuery);
     $getDocumentos->execute();
     $documentos = $getDocumentos->fetchAll();
+
+    //  Consulta para obtener a los usuarios
+    $usuariosQuery = "SELECT id_user, email, rol, activo FROM usuario";
+    $getUsuarios   = $conexion->prepare($usuariosQuery);
+    $getUsuarios->execute();
+    $usuarios      = $getUsuarios->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -45,39 +63,24 @@
     <link rel="stylesheet" href="<?= $styles ?>/sigsm-input.css">
     <link rel="stylesheet" href="<?= $styles ?>/shadow.css">
     <link rel="stylesheet" href="<?= $styles ?>/sigsm-indicator.css">
+    <link rel="stylesheet" href="<?= $styles ?>/sigsm-buttonsgrp.css">
     <link rel="stylesheet" href="table.css">
 
     <style>
-        .panel-unique-button         {
-            color:            rgb(75, 69, 80);
-            text-align:         start;
-            padding:            3px 20px;
-            font-weight:        600;
-            font-size:          14px;
-            border-radius:      7px;
-            border:             none;
-            background-color:   white;
-            transition:
-                background-color .1s ease-out;
+        html, body {
+            height: 100%;
+            margin: 0;
         }
 
-        .panel-unique-button:hover  {
-            background-color:   rgb(103, 127, 249);
-            color:              rgb(255, 255, 255);
+        /* Permitir que el contenedor principal ocupe al menos toda la altura de la ventana */
+        body > .container-fluid {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
-        .panel-unique-button:active  {
-            background-color:   rgb(54, 85, 235);
-        }
-
-        .panel-unique-grpbutton       {
-            border-right: 3px solid rgb(197, 196, 196);
-            transition:
-                border-right .1s ease-out;
-        }
-
-        .panel-unique-grpbutton:hover {
-            border-right: 3px solid rgb(224, 223, 223);
+        main.row {
+            flex: 1; /* Hace que el main ocupe todo el espacio restante debajo del header */
         }
 
         .panel-unique-separator       {
@@ -104,35 +107,38 @@
                         </span>
                     </div>
                 </div>
-                
             </div>
         </header>
         <!--
             Contenedor principal
         -->
-        <main class="row d-flex justify-content-center main-mt h-100">
+        <main class="row d-flex justify-content-center main-mt align-self-stretch">
             <!-- Contenedor del panel -->
-            <div class="col-12 d-flex flex-column flex-md-row h-100">
+            <div class="col-12 d-flex flex-column flex-md-row align-self-stretch">
                 <!-- Panel lateral (buttons) -->
-                <div class="col-12 col-md-3 col-lg-2 d-flex flex-column panel-unique-grpbutton h-100">
+                <div class="col-12 col-md-3 col-lg-2 d-flex flex-column sigsm-buttonsgrp sigsm-buttonsgrp-br h-100">
                     <!-- Opciones -->
                     <div class="col-12 d-flex flex-column">
                         <button id="option-categories" class="panel-unique-button">Categorias</button>
-                        <button id="option-accounts"   class="panel-unique-button">Cuentas</button>
+                        <?php if ($_SESSION['rol'] == "administrador"): ?>
+                            <button id="option-accounts"   class="panel-unique-button">Cuentas</button>
+                        <?php endif?>
                     </div>
-                    <hr class="panel-unique-separator">
                     <!-- Panel de registros -->
-                    <div class="col-12 d-flex flex-column">
-                        <button id="option-events"     class="panel-unique-button">Registros</button>
-                    </div>
+                    <?php if ($_SESSION['rol'] == "administrador"): ?>
+                        <hr class="panel-unique-separator">
+                        <div class="col-12 d-flex flex-column">
+                            <button id="option-events"     class="panel-unique-button">Registros</button>
+                        </div>
+                    <?php endif?>
                     <hr class="panel-unique-separator">
                     <!-- Cuenta -->
-                    <div class="col-12 d-flex flex-column">
-                        <button id="option-logout"     class="panel-unique-button">Cerrar sesión</button>
-                    </div>
+                    <form action="<?= $repositorio ?>php/modules/user/account.php" method="POST" class="col-12 d-flex flex-column">
+                        <button id="option-logout" type="submit" class="panel-unique-button" name="accion" value="logout">Cerrar sesión</button>
+                    </form>
                 </div>
                 <!-- Contenido principal -->
-                <div class="d-flex col-12 col-md-9 col-lg-10 flex-column">
+                <div class="d-flex col-12 col-md-9 col-lg-10 flex-column h-100">
                     <!-- Categorias -->
                     <div id="content-categories" class="col-12 d-flex flex-column justify-content-center d-block">
                         <!-- Creación de categorías -->
@@ -144,9 +150,9 @@
                             </div>
                         </form>
                         <!-- Categorias y configuracion -->
-                        <div class="col-12 d-flex flex-column flex-md-row justify-content-between">
+                        <div class="col-12 d-flex flex-column flex-md-row justify-content-between align-self-stretch">
                             <!-- Contenedor de botones de selección de categorías -->
-                            <div id="content-categories-category-selector" class="col-12 col-md-3 col-lg-2 d-flex flex-column align-items-center panel-unique-grpbutton d-none">
+                            <div id="content-categories-category-selector" class="col-12 col-md-3 col-lg-2 d-flex flex-column align-items-center h-100 sigsm-buttonsgrp sigsm-buttonsgrp-br d-none">
                                 
                             </div>
 
@@ -186,14 +192,14 @@
                                 </div>
 
                                 <!-- Tabla de documentos -->
-                                <table id="content-category-selected-documents" class="col-10 table" style="color: rgba(0, 0, 0, 0.5);">
+                                <table id="content-category-selected-documents" class="col-10 table table-hover table-striped" style="color: rgba(120, 118, 118, 0.5);">
                                     <thead>
                                         <tr>
                                             <th scope="col">ID</th>
                                             <th scope="col">Nombre</th>
                                             <th scope="col">Fecha</th>
                                             <th scope="col">Estado</th>
-                                            <th>Otro<th>
+                                            <th>Otro</th>
                                         </tr>
                                     </thead>
                                     <tbody id="content-category-selected-documents-tablebody">
@@ -254,19 +260,13 @@
                     <div id="content-accounts" class="col-12 d-flex flex-row h-100 d-none">
 
                         <!-- Opciones de cuentas -->
-                        <div class="d-flex col-12 flex-column align-items-start col-md-3 col-lg-2 align-self-stretch p-1 panel-unique-grpbutton">
+                        <div class="d-flex col-12 flex-column align-items-start col-md-3 col-lg-2 align-self-stretch p-1 sigsm-buttonsgrp sigsm-buttonsgrp-br">
                             <!-- Botones en order arriba -> abajo -->
-                            <button class="col-12 panel-unique-button">
+                            <button id="content-accounts-option-create" class="col-12 panel-unique-button">
                                 Creación
                             </button>
-                            <button class="col-12 panel-unique-button">
+                            <button id="content-accounts-option-update" class="col-12 panel-unique-button">
                                 Actualización
-                            </button>
-                            <button class="col-12 panel-unique-button">
-                                Desactivación
-                            </button>
-                            <button class="col-12 panel-unique-button">
-                                Eliminación
                             </button>
                         </div>
 
@@ -274,7 +274,7 @@
 
                             <!-- Formulario de creación de cuentas  -->
                             <!-- autocomplete desactivado para no ver información sobre otras cuentas creadas anteriormente -->
-                            <form id="content-accounts-create" action=" <?= $repositorio ?>php/modules/manage/account.php" method="POST" class="col-12 d-flex flex-column align-items-center p-2 gap-3" autocomplete="off">
+                            <form id="content-accounts-create" action=" <?= $repositorio ?>php/modules/manage/account.php" method="POST" class="col-12 d-flex flex-column align-items-center p-2 gap-3 d-block" autocomplete="off">
                                 <input  type="text" name="account-email-input"       class="col-lg-8 col-md-10 col-12 sigsm-input-def" required                           placeholder="Ingrese un email">
                                 <input  type="text" name="account-password-input"    class="col-lg-8 col-md-10 col-12 sigsm-input-def" required                           placeholder="Ingrese una contraseña">
                                 <input              name="account-role-input"        class="col-lg-8 col-md-10 col-12 sigsm-input-def" required list="account-role-input" placeholder="ROL">
@@ -291,12 +291,129 @@
                                     <p class="text-break" style="color: rgb(169, 169, 169); font-size: 13px; font-weight: 500;">Las contraseñas deben de tener: mayúsculas y minúsculas, un mínimo de 8 carácteres</p>
                                 </div>
                             </form>
+
+                            <div id="content-accounts-update" class="col-12 d-flex flex-column align-items-center p-2 gap-3 d-none" autocomplete="off">
+                                <div class="col-12 d-flex justify-content-center">
+                                    <input  type="text" id="accounts-email-to-search-input" name="accounts-email-to-search-input"       class="col-lg-8 col-md-10 col-12 sigsm-input-def" required                           placeholder="Ingrese un email">
+                                </div>
+
+                                <!-- Tabla con todos los usuarios almacenados en la Base de Datos -->
+                                <table class="table table-hover table-striped">
+
+                                    <!-- Configuramos las columnas de la tabla -->
+                                    <thead class="thead-light">
+                                        <th scope="col">Email </th>
+                                        <th scope="col">Rol   </th>
+                                        <th scope="col">Estado</th>
+                                    </thead>
+
+                                    <!-- Enseñamos a los usuarios -->
+                                    <tbody id="content-accounts-tbody">
+                                    </tbody>
+                                </table>
+                                <!-- <input  type="text" name="account-email-tosearch-input"       class="col-lg-8 col-md-10 col-12 sigsm-input-def" required                           placeholder="Ingrese un email">
+                                <input  type="text" name="account-password-input"    class="col-lg-8 col-md-10 col-12 sigsm-input-def" required                           placeholder="Ingrese una contraseña">
+                                <input              name="account-role-input"        class="col-lg-8 col-md-10 col-12 sigsm-input-def" required list="account-role-input" placeholder="ROL">
+                                <datalist id="account-role-input">
+                                    <option value="Administrador">
+                                    <option value="Administrativo">
+                                </datalist> -->
+                            </div>
                         </div>
                     </div>
 
                     <!-- Eventos -->
                     <div id="content-events" class="col-12 d-flex flex-column justify-content-center d-none">
+                        <!-- Eventos de gestión de categorías -->
+                        <div class="col-12 d-flex flex-column align-items-center my-2" style="border-top: 1px solid rgb(226, 226, 226)">
+                            <h5>Gestión de categorías</h5>
+                            <?php
+                                //  Consulta para obtener el contenido de la tabla de gestionCat (eventos de gestión de categorías)
+                                $gestionCatQuery      = "SELECT usuario, nombre_categoria, acción, fecha FROM gestionCat ORDER BY id DESC LIMIT 20";
+                                $getGestionCat        = $conexion->prepare($gestionCatQuery);
+                                $getGestionCat->execute();
 
+                                if ($getGestionCat->rowCount() > 0):
+                            ?>
+                                    <table class="col-12 table table-hover table-striped">
+                                        <thead class="thead-light">
+                                            <th scope="col">Admin    </th>
+                                            <th scope="col">Categoría</th>
+                                            <th scope="col">Acción   </th>
+                                            <th scope="col">Fecha    </th>
+                                        </thead>
+                                        <tbody style="height: 200px; overflow-y: scroll">
+                                        <?php
+                                            $eventsGestionCat = $getGestionCat->fetchAll();
+                                            foreach ($eventsGestionCat as $event):
+                                        ?>
+                                            <tr>
+                                                <td><?= $event['usuario'] ?></td>
+                                                <td><?= $event['nombre_categoria'] ?></td>
+                                                <td><?= $event['acción'] ?></td>
+                                                <td><?= $event['fecha'] ?></td>
+                                            </tr>
+                                        <?php
+                                            endforeach;
+                                        ?>
+                                        </tbody>
+                                    </table>
+                            <?php
+                                else:
+                            ?>
+                                    <div class="d-flex flex-column align-items-center justify-content-center sigsm-indicator sigsm-shadow-y-1 p-2" style="width: 80%; height: auto;">
+                                        <h5 class="p-1" style="text-align: center; background-color: rgb(104, 255, 93); color: rgb(36, 202, 24); font-weight: 500; width: 120px; border-radius: 30px; font-size: 16px;">Sin eventos</h5>
+                                        <p  class="text-break rounded px-3" style="color: rgb(158, 158, 158); font-weight: 300;">Los triggers ocurrirán al gestionar categorías</p>
+                                    </div>
+                            <?php
+                                endif;
+                            ?>
+                        </div>
+
+                        <!-- Eventos de gestión de documentos -->
+                        <div class="col-12 d-flex flex-column align-items-center my-2" style="border-top: 1px solid rgb(226, 226, 226)">
+                            <h5>Gestión de documentos</h5>
+                            <?php
+                                $gestionDocQuery      = "SELECT id, usuario, nombre_documento, acción, fecha FROM gestionDoc ORDER BY id DESC LIMIT 20";
+                                $getGestionDoc        = $conexion->prepare($gestionDocQuery);
+                                $getGestionDoc->execute();
+
+                                if ($getGestionDoc->rowCount() > 0):
+                            ?>
+                                    <table class="col-12 table table-hover table-striped">
+                                        <thead class="thead-light">
+                                            <th scope="col">Admin    </th>
+                                            <th scope="col">Documento</th>
+                                            <th scope="col">Acción   </th>
+                                            <th scope="col">Fecha    </th>
+                                        </thead>
+                                        <tbody style="height: 200px; overflow-y: scroll">
+                                        <?php
+                                            $eventsGestionDoc = $getGestionDoc->fetchAll();
+                                            foreach ($eventsGestionDoc as $event):
+                                        ?>
+                                            <tr>
+                                                <td><?= $event['usuario'] ?></td>
+                                                <td><?= $event['nombre_documento'] ?></td>
+                                                <td><?= $event['acción'] ?></td>
+                                                <td><?= $event['fecha'] ?></td>
+                                            </tr>
+                                        <?php
+                                            endforeach;
+                                        ?>
+                                        </tbody>
+                                    </table>
+                            <?php
+                                else:
+                            ?>
+                                    <div class="d-flex flex-column align-items-center justify-content-center sigsm-indicator sigsm-shadow-y-1 p-2" style="width: 80%; height: auto;">
+                                        <h5 class="p-1" style="text-align: center; background-color: rgb(104, 255, 93); color: rgb(36, 202, 24); font-weight: 500; width: 120px; border-radius: 30px; font-size: 16px;">Sin eventos</h5>
+                                        <p  class="text-break rounded px-3" style="color: rgb(158, 158, 158); font-weight: 300;">Los triggers ocurrirán al gestionar documentos</p>
+                                    </div>
+                            <?php
+                                endif;
+                            ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -305,14 +422,15 @@
 
     <!-- Instalamos variables en la ventana para que sean globales y otros scripts puedan acceder a ellas -->
     <script>
-        window.categories = <?php echo json_encode($categorias)?>;
-        window.reviews    = <?php echo json_encode($reseñas)   ?>;
-        window.documents  = <?php echo json_encode($documentos)?>;
+        window.categories = <?php echo json_encode($categorias) ?>;
+        window.reviews    = <?php echo json_encode($reseñas)    ?>;
+        window.documents  = <?php echo json_encode($documentos) ?>;
+        window.accounts   = <?php echo json_encode($usuarios)   ?>;
     </script>
     <script src="config.js"></script>
-
     <script src="<?= $styles ?>/main.js"></script>
     <script src="categories.js"></script>
+    <script src="accounts.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>

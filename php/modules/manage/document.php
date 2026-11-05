@@ -14,13 +14,20 @@
     try {
         // Aseguramos que solo se procese si la petición es POST y si vienen los campos obligatorios
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $errores = [];    
+
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+            $admin_email            =   $_SESSION['email'];
 
             /** Se validará qué acción está haciendo el usuario al sistema querer requerir del módulo
              *  El parámetro "accion" en $_POST es pasado por botones al querer gestionar documentos
              *  (crear, actualizar, activar/desactivar, eliminar).
             */
+
             switch ($_POST['accion']) {
+                
+
                 case 'create':
                     $categoryId = $_POST['category_id'];
                     $fileName = $_POST["document-name-input"];
@@ -40,10 +47,11 @@
                         die("Error: Formato de archivo no permitido (solo JPG y PDF).");
                     }
 
-                    $consulta = "INSERT INTO documento (id_categoria, nombre_documento) VALUES (:id_categoria, :nombre_documento)";
+                    $consulta = "INSERT INTO documento (id_categoria, nombre_documento, email_ultimo) VALUES (:id_categoria, :nombre_documento, :email_ultimo)";
                     $stmt = $conexion->prepare($consulta);
-                    $stmt->bindParam(":nombre_documento", $fileName, PDO::PARAM_STR);
-                    $stmt->bindParam(":id_categoria", $categoryId, PDO::PARAM_INT);
+                    $stmt->bindParam(":nombre_documento", $fileName,    PDO::PARAM_STR);
+                    $stmt->bindParam(":id_categoria",     $categoryId,  PDO::PARAM_INT);
+                    $stmt->bindParam(":email_ultimo",     $admin_email, PDO::PARAM_STR);
                     $stmt->execute();
 
                     $idRecienCreado = $conexion->lastInsertId();
@@ -82,9 +90,10 @@
                     }
 
                     //  Consulta
-                    $sql            =   $conexion->prepare('UPDATE documento SET nombre_documento = :docname WHERE id_documento = :id');
-                    $sql->bindParam(':id', $document_id, PDO::PARAM_INT);
+                    $sql            =   $conexion->prepare('UPDATE documento SET nombre_documento = :docname, email_ultimo = :user WHERE id_documento = :id');
+                    $sql->bindParam(':id',      $document_id,   PDO::PARAM_INT);
                     $sql->bindParam(':docname', $document_name, PDO::PARAM_STR);
+                    $sql->bindParam(':user',    $admin_email,   PDO::PARAM_STR);
                     $sql->execute();
 
                     //  Validamos cambios
@@ -103,8 +112,9 @@
                     $document_id    =  $_POST['document-id-input'];
                     
                     //  Consulta
-                    $sql            =  $conexion->prepare("UPDATE documento SET activo = 0 WHERE id_documento = :id");
-                    $sql->bindParam(":id", $document_id, PDO::PARAM_INT);
+                    $sql            =  $conexion->prepare("UPDATE documento SET activo = 0, email_ultimo = :user WHERE id_documento = :id");
+                    $sql->bindParam(":id",   $document_id, PDO::PARAM_INT);
+                    $sql->bindParam(":user", $admin_email, PDO::PARAM_STR);
                     $sql->execute();
 
                     //  Validamos cambios
@@ -117,8 +127,9 @@
                     $document_id = $_POST['document-id-input'];
 
                     //  Consulta
-                    $sql            =   $conexion->prepare("UPDATE documento SET activo = 1 WHERE id_documento = :id");
-                    $sql->bindParam(":id", $document_id, PDO::PARAM_INT);
+                    $sql            =  $conexion->prepare("UPDATE documento SET activo = 1, email_ultimo = :user WHERE id_documento = :id");
+                    $sql->bindParam(":id",   $document_id, PDO::PARAM_INT);
+                    $sql->bindParam(":user", $admin_email, PDO::PARAM_STR);
                     $sql->execute();
 
                     //  Validamos cambios

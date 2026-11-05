@@ -1,6 +1,7 @@
 .div-content {
     opacity: 0;
-    transition: opacity .5s ease;
+    transition: 
+        opacity .5s ease;
 }
 
 .div-content.on-activate {

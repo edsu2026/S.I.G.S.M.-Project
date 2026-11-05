@@ -30,7 +30,8 @@
     <link rel="stylesheet" href="<?= $styles ?>/card-custom.css">
     <link rel="stylesheet" href="<?= $styles ?>/main.css">
     <link rel="stylesheet" href="<?= $styles ?>/input.css">
-    <link rel="stylesheet" href="<?= $styles ?>/buttongroup.css">
+    <link rel="stylesheet" href="<?= $styles ?>/sigsm-buttonsgrp.css">
+    <link rel="stylesheet" href="<?= $styles ?>/sigsm-input.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
@@ -121,32 +122,32 @@
                     //  Información del documento
                     $document_data = $sql->fetch();
                 ?>
-                    <div class="col-12 col-md-2 d-flex flex-column p-1" style="border-right: 1px solid rgba(0, 0, 0, 0.3); box-shadow: 6px 0 5px -2px rgba(0, 0, 0, 0.3);">
+                    <div class="col-12 col-md-2 d-flex flex-column p-1 sigsm-buttonsgrp-br">
                         <h5>Opciones<h5>
                         <hr>
                         <h5>Estado</h5>
-                        <form action="<?= $repositorio ?>/php/modules/manage/document.php" method="POST" class="col-12 grp-buttons">
+                        <form action="<?= $repositorio ?>/php/modules/manage/document.php" method="POST" class="col-12 d-flex flex-column align-items-center gap-1">
                             <input type="text" id="document-id-input" name="document-id-input"   value="<?= $document_id ?>" hidden>
                             <?php switch ($document_data['activo']) {
-                                case true:  ?> <button name="accion" value="deactivate" class="button-theme-lightblue">Desactivar</button> <?php break;
-                                case false: ?> <button name="accion" value="activate"   class="button-theme-lightblue">Activar   </button> <?php break;
+                                case true:  ?> <button name="accion" value="deactivate" class="col-12 col-md-10 button-theme-lightblue rounded">Desactivar</button> <?php break;
+                                case false: ?> <button name="accion" value="activate"   class="col-12 col-md-10 button-theme-lightblue rounded">Activar   </button> <?php break;
                                 default:    break;
                             }?>
-                            <button name="accion" value="delete" class="button-theme-lightred">Eliminar</button>
+                            <button name="accion" value="delete" class="col-12 col-md-10 button-theme-lightred rounded">Eliminar</button>
                         </form>
                     </div>
                     <div class="col-12 col-md-8 d-flex flex-column align-items-center justify-content-center rounded" style="height: 100%;">
                         <form action="<?= $repositorio ?>php/modules/manage/document.php" method="POST" enctype="multipart/form-data" class="col-12 d-flex flex-column justify-content-center align-items-center gap-3">
-                            <input type="text" id="document-id-input" name="document-id-input"   value="<?= $document_id ?>" hidden>
-                            <input type="text" id="document-name-input" name="document-name-input" class="col-12 col-md-8 input-def" placeholder="Ingrese nuevo nombre" required>
-                            <input type="file" id="document-file-input" name="document-file-input" class="col-12 col-md-8 input-def" required>
+                            <input type="text" id="document-id-input"   name="document-id-input"   value="<?= $document_id ?>" hidden>
+                            <input type="text" id="document-name-input" name="document-name-input" class="col-12 col-md-8 sigsm-input-def" placeholder="Ingrese nuevo nombre" required>
+                            <input type="file" id="document-file-input" name="document-file-input" class="col-12 col-md-8 sigsm-input-def" required>
                             
                             <div class="col-12 col-md-8 d-flex flex-column align-items-center justify-content-center gap-1">
                                 <button name="accion" value="update" type="submit" class="col-12 button-panel button-theme-lightblue rounded">Actualizar</button>
                             </div>
                         </form>
                     </div>
-                    <div class="col-12 col-md-2 d-flex flex-column p-2" style="border-left: 1px solid rgba(0, 0, 0, 0.3); box-shadow: -6px 0 5px -2px rgba(0, 0, 0, 0.3);">
+                    <div class="col-12 col-md-2 d-flex flex-column sigsm-buttonsgrp-bl p-2">
                         <h5>Propiedades</h5>
                         <hr>
                         <!-- Lista -->

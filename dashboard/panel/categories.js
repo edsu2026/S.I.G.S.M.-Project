@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Iteramos sobre cada categoría y creamos un botón para cada una
         categories.forEach(category => {
-            console.log(category);
 
             const button = document.createElement('button');
             button.innerText = category['nombre_categoria'];

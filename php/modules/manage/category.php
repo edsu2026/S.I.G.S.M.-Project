@@ -18,8 +18,12 @@
     # Si el método es post
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
-            switch ($_POST["accion"]) {
+            if (session_status() == PHP_SESSION_NONE) {
+                session_start();
+            }
+            $admin_email            =   $_SESSION['email'];
 
+            switch ($_POST["accion"]) {
                 # Si la acción del administrador es "crear categoría"
                 case "create":
                     //  Obtenemos información de la categoría
@@ -29,12 +33,14 @@
                         die('El nombre que se intenta ingresar no es válido');
                     }
 
-                    $token_categoria    =   bin2hex(random_bytes(32)); // Genera un token de 64 caracteres
+                    // Generamos un token
+                    $token_categoria    =   bin2hex(random_bytes(32)); 
 
                     //  Consulta
-                    $sql                =   $conexion->prepare("INSERT INTO categoria (nombre_categoria, token_categoria) VALUE (:catname, :cattoken)");
-                    $sql->bindParam(":catname", $category_name, PDO::PARAM_STR);
+                    $sql                =   $conexion->prepare("INSERT INTO categoria (nombre_categoria, token_categoria, email_ultimo) VALUE (:catname, :cattoken, :user)");
+                    $sql->bindParam(":catname",  $category_name,   PDO::PARAM_STR);
                     $sql->bindParam(":cattoken", $token_categoria, PDO::PARAM_STR);
+                    $sql->bindParam(":user",     $admin_email,     PDO::PARAM_STR);
                     $sql->execute();
 
                     //  Validamos que se haya insertado alguna tabla
@@ -54,9 +60,10 @@
                     }
                     
                     //  Consulta
-                    $sql                =   $conexion->prepare("UPDATE categoria SET nombre_categoria = :nombre_categoria WHERE id_categoria = :id_categoria");
+                    $sql                =   $conexion->prepare("UPDATE categoria SET nombre_categoria = :nombre_categoria, email_ultimo = :user WHERE id_categoria = :id_categoria");
                     $sql->bindParam(":nombre_categoria", $category_newname, PDO::PARAM_STR);
-                    $sql->bindParam(":id_categoria", $category_id, PDO::PARAM_INT);
+                    $sql->bindParam(":id_categoria",     $category_id,      PDO::PARAM_INT);
+                    $sql->bindParam(":user",             $admin_email,      PDO::PARAM_STR);
                     $sql->execute();
                     break;
                 default:
