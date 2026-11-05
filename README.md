@@ -317,7 +317,7 @@ Página de encuesta con:
 ---
 
 ## 📝 Encuestas por Código QR (flujo principal)
-El anonimato de las encuestas es real: **no hace falta loguearse ni usar sesiones**; todo el flujo se sostiene con dos cookies del navegador del paciente (30 días de vigencia, path `/`):
+El anonimato de las encuestas es real: **no hace falta loguearse ni usar sesiones**; todo el flujo se sostiene con dos cookies del navegador del paciente:
 
 ```mermaid
 flowchart LR
