@@ -40,7 +40,6 @@
 - [🖥 Máquina Virtual (OVA)](#-máquina-virtual-ova)
 - [🐧 Sistemas Operativos y Seguridad (ASO)](#-sistemas-operativos-y-seguridad-aso)
 - [🚀 Instalación y Despliegue](#-instalación-y-despliegue)
-- [📌 Estado Actual del Proyecto](#-estado-actual-del-proyecto)
 
 ---
 
@@ -612,21 +611,3 @@ Si no llega a estar la base de datos importada, las páginas que consultan MySQL
 4. Importá el esquema MySQL (`assets/sql/basededatos.sql`) y configurá la contraseña de base de datos necesaria en `php/conexion.php` según el entorno del servidor (por defecto trae `root`/contraseña vacía, típica de XAMPP).
 
 ---
-
-## 📌 Estado Actual del Proyecto
-
-### Lo que ya funciona
-- Flujo completo de **encuestas por QR** con cookies: registro del token → listado → selección → formulario → inserción de la reseña → limpieza de la cookie.
-- **Gestión de documentos** completa: alta con su archivo físico (`<id>.<ext>`), actualización, activar/desactivar y eliminar.
-- **Gestión de categorías**: crear (con token aleatorio de 64 caracteres para armar los QR) y renombrar.
-- **Panel tipo SPA** con tabla de documentos por categoría y **estadísticas de reseñas en vivo** (cantidad, promedio y barras por criterio).
-- **Login** con PDO y sesiones, con redirección según el rol.
-- Suite completa de **administración del servidor** en dos versiones (modular y monolítica): usuarios, grupos, cifrado OpenSSL, hardening SSH, UFW, permisos, respaldos cifrados, monitoreo y auditoría.
-
-### Lo que queda pendiente
-- **Protección por sesión dentro de las páginas del panel** (hoy la única puerta es la redirección del login y los módulos no revalidan nada) y el **cierre de sesión**, que todavía no tiene lógica.
-- **Unificar el esquema de contraseñas**: el login hace un pre-hash (SHA-256 + base64) antes de `password_verify()`, pero el alta de cuentas guarda el hash de la contraseña en crudo, así que una cuenta creada desde el panel no llegaría a iniciar sesión.
-- **Terminar la página de documentos del sitio público** (`home/documents/page.php`): corregir la ruta del `require` de la conexión, sus enlaces (todavía apuntan a `index.html` y otras páginas del prototipo anterior), el botón **"Abrir"** (sin `href` por ahora, falta enlazar el archivo físico) y la hoja `paddings.css` que carga pero quedó fuera del proyecto.
-- **Completar la columna `profesionalismo`** de `reseña` (el formulario solo pregunta 3 criterios) y dar uso a las tablas de auditoría `gestionCat`, `gestionDoc` y `gestionEnc`, que están creadas pero nadie escribe en ellas.
-- **Tokens en `datosRellenoCat.sql`**: si se quiere usar ese relleno para armar QR, hay que completar los `token_categoria` a mano.
-- Limpieza menor: clases heredadas de Bootstrap 4 (`mr-1`), el typo `position-absoulte` en el formulario de encuesta, y las credenciales de la BD escritas directo en `conexion.php` (pensadas para el entorno de XAMPP).
