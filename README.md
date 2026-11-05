@@ -243,7 +243,7 @@ Los módulos se procesan **exclusivamente por `POST`** (excepto indicación cont
 | Redirección | Siempre vuelve a `dashboard/panel/page.php`. |
 | No implementado | `delete` y `deactivate`: el panel dibuja botones con `accion=delete` / `accion=deactivate` y `php/modules/manage/survey.php` tiene un `case 'delete'` vacío, pero en `category.php` esas acciones caen al `default` y **no ejecutan nada** (solo redirigen). |
 
-#### `php/modules/manage/account.php` — Cuentas del staff
+#### `php/modules/manage/account.php` — Cuentas 
 | Aspecto | Detalle |
 | :--- | :--- |
 | Acciones implementadas | `create` |
