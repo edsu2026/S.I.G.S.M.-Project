@@ -61,7 +61,7 @@
 **S.I.G.S.M.** es una plataforma web e infraestructura de servidor diseñada para modernizar, digitalizar y resguardar la información del **Hospital de Clínicas**. El sistema combina dos grandes frentes de trabajo desarrollados por el equipo **E.D.S.U.**:
 
 1. **Una aplicación web PHP/MySQL** orientada a dos grupos de usuarios: el **paciente** (que consulta documentos y completa encuestas de reseña de forma anónima mediante códigos QR) y el **personal administrativo/administrador** (que gestiona categorías, documentos y cuentas desde un panel de administración).
-2. **Una suite de scripts Bash** para la administración, el endurecimiento (hardening), el respaldo y la auditoría del servidor Ubuntu sobre el que se despliega la aplicación.
+2. **un conjunto de scripts Bash** para la administración, el endurecimiento (hardening), el respaldo y la auditoría del servidor Ubuntu sobre el que se despliega la aplicación.
 
 Este repositorio corresponde a la rama de desarrollo (**non-stable**) del proyecto: el flujo de encuestas por QR, la gestión de documentos y el panel de administración funcionan de punta a punta, mientras que otras partes (como la gestión de cuentas desde el panel) todavía están en construcción.
 
@@ -79,7 +79,7 @@ Este repositorio corresponde a la rama de desarrollo (**non-stable**) del proyec
 
 ## 🏗 Arquitectura General del Proyecto
 
-La aplicación web está desarrollada en **PHP 8 procedural, sin framework**, con los siguientes pilares técnicos:
+La aplicación web está desarrollada en **PHP 8 procedural, sin framework**, utiliza las siguientes tecnologías:
 
 | Componente | Tecnología / Mecanismo | Dónde se visualiza |
 | :--- | :--- | :--- |
@@ -316,7 +316,7 @@ Página de encuesta con:
 ---
 
 ## 📝 Encuestas por Código QR (flujo principal)
-El anonimato de las encuestas es real: **no hace falta loguearse ni usar sesiones**; todo el flujo se sostiene con dos cookies del navegador del paciente:
+Las encuestas se realizan sin iniciar sesión. Para gestionar el recorrido del paciente se utilizan dos cookies: AVAILABLE_SURVEYS y SELECTED_SURVEY.
 
 ```mermaid
 flowchart LR
@@ -386,7 +386,7 @@ El proyecto usa **JavaScript vanilla** (el único script de afuera es el bundle 
 | `home/surveys/survey/inputs.js` | Formulario de encuesta | Escucha los radios de las 3 preguntas y pinta la respuesta elegida en los indicadores grandes (`#answer-atencion`, `#answer-velocidad`, `#answer-condiciones`). |
 | `home/surveys/survey/validar.js` | Formulario de encuesta | En el `submit`: verifica que las 3 preguntas tengan una respuesta marcada; si falta alguna, muestra `alert("Responda la pregunta N")` y cancela el envío con `preventDefault()`. |
 | `dashboard/panel/config.js` | Panel principal | Conmutador de pestañas por clases Bootstrap (`d-block`/`d-none` + `on-activate` para la transición de opacidad en `div-content.css`): cambia entre `content-categories`, `content-accounts` y `content-events` sin recargar la página. |
-| `dashboard/panel/categories.js` | Panel principal | El corazón de la sección "Categorías": construye el selector lateral con las categorías inyectadas; al elegir una, renderiza título, **token**, botón "Crear documento", **tabla de documentos** (con badges de estado) y **estadísticas** (cantidad, promedio y barras por criterio) a partir de `window.categories`, `window.reviews` y `window.documents`. También ajusta clases de visibilidad de todos los contenedores (`content-categories-category-selector`, `content-categories-category-unselected`, etc.). |
+| `dashboard/panel/categories.js` | Panel principal | Gestiona la sección Categorías: construye el selector lateral con las categorías inyectadas; al elegir una, renderiza título, **token**, botón "Crear documento", **tabla de documentos** (con badges de estado) y **estadísticas** (cantidad, promedio y barras por criterio) a partir de `window.categories`, `window.reviews` y `window.documents`. También ajusta clases de visibilidad de todos los contenedores (`content-categories-category-selector`, `content-categories-category-unselected`, etc.). |
 | `dashboard/manage/account/config.js` | Interfaz de cuentas (maqueta) | Conmutador análogo entre los formularios `form-create`, `form-update`, `form-activate` y `form-delete`. |
 | `validar.js` (raíz) | Cargado por `home/documents/page.php` | Código que quedó de la maqueta anterior del panel: funciones de validación client-side (`validarInicioSolicitud`, `crearCategoria`, `crearDocumento`, `actualizarEncuesta`, etc.) que validan contra IDs que ya no existen, así que en la práctica no tienen efecto. Se conserva por si se reutiliza; sus validaciones de encuesta responden al enfoque anterior (encuestas por URL), previo al actual por tokens. |
 
@@ -472,7 +472,7 @@ Cada página calcula su raíz con una variable (`$repositorio = '../../'` según
 ---
 
 ## 🖥 Scripts de Administración del Servidor (Bash)
-La suite de administración existe en **dos versiones paralelas** que implementan la misma consola de operador:
+El proyecto cuenta con dos versiones del script de administración del servidor: una modular y otra monolítica.
 
 | Versión | Ruta | Características |
 | :--- | :--- | :--- |
