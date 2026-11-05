@@ -63,7 +63,7 @@
 1. **Una aplicación web PHP/MySQL** orientada a dos grupos de usuarios: el **paciente** (que consulta documentos y completa encuestas de reseña de forma anónima mediante códigos QR) y el **personal administrativo/administrador** (que gestiona categorías, documentos y cuentas desde un panel de administración).
 2. **Una suite de scripts Bash** para la administración, el endurecimiento (hardening), el respaldo y la auditoría del servidor Ubuntu sobre el que se despliega la aplicación.
 
-Este repositorio corresponde a la rama de desarrollo (**non-stable**) del proyecto: el flujo de encuestas por QR, la gestión de documentos y el panel de administración funcionan de punta a punta, mientras que otras partes (como la gestión de cuentas desde el panel) todavía están en construcción. En la [sección de Estado Actual](#-estado-actual-del-proyecto) se detalla qué está listo y qué falta.
+Este repositorio corresponde a la rama de desarrollo (**non-stable**) del proyecto: el flujo de encuestas por QR, la gestión de documentos y el panel de administración funcionan de punta a punta, mientras que otras partes (como la gestión de cuentas desde el panel) todavía están en construcción.
 
 ---
 
