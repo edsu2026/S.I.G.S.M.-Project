@@ -414,8 +414,6 @@ El proyecto usa **JavaScript vanilla** (el único script de afuera es el bundle 
 | `dashboard/panel/table.css` | Filas de tabla `.table-tr` (hover celeste, cursor pointer, botones internos transparentes). | Tablas dentro del panel. |
 | `dashboard/panel/div-content.css` | Transición de opacidad de las secciones del panel (`.div-content` / `.on-activate`). | SPA del panel. |
 
-Ojo: `styles/paddings.css` la cargan `home/documents/page.php`, `dashboard/manage/account/page.php` y `dashboard/manage/category/page.php`, pero el archivo se nos quedó fuera del proyecto.
-
 ---
 
 ## 🗄 Base de Datos
