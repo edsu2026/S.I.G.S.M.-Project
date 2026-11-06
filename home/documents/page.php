@@ -84,20 +84,6 @@
                         </span>
                     </div>
                 </div>
-                <div id="header-sub" class="col-12 d-flex flex-row justify-content-start align-items-center">
-                    <span>
-                        <a href="#" class="button button-link">Redirecciones</a>
-                    </span>
-                    <span>
-                        <a href="#" class="button button-link">Preguntas</a>
-                    </span>
-                    <span>
-                        <a href="#" class="button button-link">Campañas</a>
-                    </span>
-                    <span>
-                        <a href="#" class="button button-link">Acerca de</a>
-                    </span>
-                </div>
             </div>
         </header>
 
