@@ -47,11 +47,12 @@
                         die("Error: Formato de archivo no permitido (solo JPG y PDF).");
                     }
 
-                    $consulta = "INSERT INTO documento (id_categoria, nombre_documento, email_ultimo) VALUES (:id_categoria, :nombre_documento, :email_ultimo)";
+                    $consulta = "INSERT INTO documento (id_categoria, nombre_documento, email_ultimo, ext) VALUES (:id_categoria, :nombre_documento, :email_ultimo, :ext)";
                     $stmt = $conexion->prepare($consulta);
-                    $stmt->bindParam(":nombre_documento", $fileName,    PDO::PARAM_STR);
-                    $stmt->bindParam(":id_categoria",     $categoryId,  PDO::PARAM_INT);
-                    $stmt->bindParam(":email_ultimo",     $admin_email, PDO::PARAM_STR);
+                    $stmt->bindParam(":nombre_documento", $fileName,        PDO::PARAM_STR);
+                    $stmt->bindParam(":id_categoria",     $categoryId,      PDO::PARAM_INT);
+                    $stmt->bindParam(":email_ultimo",     $admin_email,     PDO::PARAM_STR);
+                    $stmt->bindParam(':ext',              strtolower($ext), PDO::PARAM_STR);
                     $stmt->execute();
 
                     $idRecienCreado = $conexion->lastInsertId();
@@ -90,10 +91,11 @@
                     }
 
                     //  Consulta
-                    $sql            =   $conexion->prepare('UPDATE documento SET nombre_documento = :docname, email_ultimo = :user WHERE id_documento = :id');
-                    $sql->bindParam(':id',      $document_id,   PDO::PARAM_INT);
-                    $sql->bindParam(':docname', $document_name, PDO::PARAM_STR);
-                    $sql->bindParam(':user',    $admin_email,   PDO::PARAM_STR);
+                    $sql            =   $conexion->prepare('UPDATE documento SET nombre_documento = :docname, email_ultimo = :user, ext = :ext WHERE id_documento = :id');
+                    $sql->bindParam(':id',      $document_id,              PDO::PARAM_INT);
+                    $sql->bindParam(':docname', $document_name,            PDO::PARAM_STR);
+                    $sql->bindParam(':user',    $admin_email,              PDO::PARAM_STR);
+                    $sql->bindParam(':ext',     strtolower($document_ext), PDO::PARAM_STR);
                     $sql->execute();
 
                     //  Validamos cambios

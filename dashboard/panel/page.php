@@ -101,11 +101,6 @@
                             <a href="#" class="button button-link">Hospital de Clínicas</a>
                         </span>
                     </div>
-                    <div class="col-6 d-flex flex-row justify-content-end align-items-center mr-1">
-                        <span>
-                            <a href="#" class="button button-link">Iniciar sesión</a>
-                        </span>
-                    </div>
                 </div>
             </div>
         </header>
@@ -170,7 +165,7 @@
                                 <!-- Opciones categoría seleccionada -->
                                 <form action="<?= $repositorio ?>php/modules/manage/category.php" method="POST" class="col-12 d-flex flex-column align-items-center p-1 gap-3">
                                     <input type="hidden" id="category-rename-id-input" name="category-id-input" value="">
-                                    <input id="category-name-input" name="category-name-input" type="text" class="col-12 col-md-10 sigsm-input-def" required placeholder="Ingrese nuevo nombre">
+                                    <input id="category-name-input" name="category-name-input" type="text" class="col-12 col-md-10 sigsm-input-def" placeholder="Ingrese nuevo nombre">
                                     <div id="content-category-selected-options-menu" class="col-12 d-flex flex-row justify-content-center gap-4">
                                         <button value="update"      type="submit" name="accion" class="col-3 button button-panel button-theme-lightblue rounded">Actualizar</button>
                                         <button value="deactivate"  type="submit" name="accion" class="col-3 button button-panel button-theme-lightblue rounded">Desactivar</button>
@@ -311,13 +306,6 @@
                                     <tbody id="content-accounts-tbody">
                                     </tbody>
                                 </table>
-                                <!-- <input  type="text" name="account-email-tosearch-input"       class="col-lg-8 col-md-10 col-12 sigsm-input-def" required                           placeholder="Ingrese un email">
-                                <input  type="text" name="account-password-input"    class="col-lg-8 col-md-10 col-12 sigsm-input-def" required                           placeholder="Ingrese una contraseña">
-                                <input              name="account-role-input"        class="col-lg-8 col-md-10 col-12 sigsm-input-def" required list="account-role-input" placeholder="ROL">
-                                <datalist id="account-role-input">
-                                    <option value="Administrador">
-                                    <option value="Administrativo">
-                                </datalist> -->
                             </div>
                         </div>
                     </div>
@@ -325,7 +313,7 @@
                     <!-- Eventos -->
                     <div id="content-events" class="col-12 d-flex flex-column justify-content-center d-none">
                         <!-- Eventos de gestión de categorías -->
-                        <div class="col-12 d-flex flex-column align-items-center my-2" style="border-top: 1px solid rgb(226, 226, 226)">
+                        <div class="col-12 d-flex flex-column align-items-center my-2">
                             <h5>Gestión de categorías</h5>
                             <?php
                                 //  Consulta para obtener el contenido de la tabla de gestionCat (eventos de gestión de categorías)
@@ -342,7 +330,7 @@
                                             <th scope="col">Acción   </th>
                                             <th scope="col">Fecha    </th>
                                         </thead>
-                                        <tbody style="height: 200px; overflow-y: scroll">
+                                        <tbody>
                                         <?php
                                             $eventsGestionCat = $getGestionCat->fetchAll();
                                             foreach ($eventsGestionCat as $event):
@@ -371,7 +359,7 @@
                         </div>
 
                         <!-- Eventos de gestión de documentos -->
-                        <div class="col-12 d-flex flex-column align-items-center my-2" style="border-top: 1px solid rgb(226, 226, 226)">
+                        <div class="col-12 d-flex flex-column align-items-center my-5">
                             <h5>Gestión de documentos</h5>
                             <?php
                                 $gestionDocQuery      = "SELECT id, usuario, nombre_documento, acción, fecha FROM gestionDoc ORDER BY id DESC LIMIT 20";
@@ -387,7 +375,7 @@
                                             <th scope="col">Acción   </th>
                                             <th scope="col">Fecha    </th>
                                         </thead>
-                                        <tbody style="height: 200px; overflow-y: scroll">
+                                        <tbody>
                                         <?php
                                             $eventsGestionDoc = $getGestionDoc->fetchAll();
                                             foreach ($eventsGestionDoc as $event):

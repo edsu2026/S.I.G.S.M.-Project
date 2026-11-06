@@ -39,12 +39,16 @@
                     $password       = $_POST['input-password']       ?? die('El sistema espera una contraseña');
 
                     // Buscamos al usuario por su email
-                    $consulta = "SELECT * FROM usuario WHERE email = :email LIMIT 1";
+                    $consulta = "SELECT * FROM usuario WHERE email = :email";
                     $stmt = $conexion->prepare($consulta);
                     $stmt->bindParam(":email", $email, PDO::PARAM_STR);
                     $stmt->execute();
                     
                     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    if (!$usuario) {
+                        header("Location: " . $repository . "/dashboard/panel/page.php");
+                    }
 
                     if ($usuario['activo'] == 0) {
                         die('Esta cuenta no se puede utilizar');

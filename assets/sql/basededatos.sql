@@ -31,9 +31,10 @@ CREATE TABLE IF NOT EXISTS documento(
 	id_documento               INT AUTO_INCREMENT NOT NULL,
     id_categoria               INT NOT NULL,
     email_ultimo               CHAR(72) NOT NULL,
-    nombre_documento           CHAR(32) NOT NULL UNIQUE,
+    nombre_documento           CHAR(64) NOT NULL UNIQUE,
     fecha_creacion             TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     activo                     BOOLEAN NOT NULL DEFAULT TRUE,
+    ext                        CHAR(10) NOT NULL,
     PRIMARY KEY(id_documento),
     FOREIGN KEY(id_categoria) REFERENCES categoria(id_categoria)
 );

@@ -92,8 +92,8 @@
                         <form action="<?= $repositorio ?>php/modules/manage/document.php" method="POST" enctype="multipart/form-data" class="col-12 d-flex flex-column justify-content-center align-items-center gap-3">
                             
                             <input type="hidden" id="document-category-input" name="category_id" value="<?= $id_categoria ?>" required>
-                            <input type="text" id="document-name-input" name="document-name-input" class="col-12 col-md-8 input-def" placeholder="Ingrese nombre del documento" required>
-                            <input type="file" id="document-file-input" name="document-file-input" class="col-12 col-md-8 input-def" required>
+                            <input type="text" id="document-name-input" name="document-name-input" class="col-12 col-md-8 sigsm-input-def" placeholder="Ingrese nombre del documento" required>
+                            <input type="file" id="document-file-input" name="document-file-input" class="col-12 col-md-8 sigsm-input-def" required>
                             
                             <button name="accion" value="create" type="submit" class="col-12 col-md-8 button-panel button-theme-lightblue rounded">Crear</button>
                         </form>

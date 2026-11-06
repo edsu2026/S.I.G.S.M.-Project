@@ -1,105 +1,127 @@
 <?php
-    require "php/conexion.php";
+    $repository = "../..";
+
+    $styles     = $repository . '/styles';
+
+    require $repository . '/php/conexion.php';
+    
+    $categorias = "";
+    $documentos = "";
+
+    try {
+        $sqlCategorias  = "SELECT * FROM categoria WHERE activo = 1"; 
+        $stmtCategorias = $conexion->prepare($sqlCategorias);
+        $stmtCategorias->execute();
+
+        $categorias     = $stmtCategorias->fetchAll();
+
+        $sqlDocumentos  = "SELECT * FROM documento WHERE activo = 1";
+        $stmtDocumentos = $conexion->prepare($sqlDocumentos);
+        $stmtDocumentos->execute();
+
+        $documentos     = $stmtDocumentos->fetchAll();
+    } catch (\Throwable $th) {
+        throw $th;
+    }
 ?>
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Documentos</title>
-        <link rel="stylesheet" href="styles/main.css">
-        <link rel="stylesheet" href="styles/colorthemes.css">
-        <link rel="stylesheet" href="styles/button.css">
-        <link rel="stylesheet" href="styles/paddings.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    </head>
-    <body style="background-image: url('assets/img/index-bg.jpg');">
-        <div class="container d-flex flex-column min-vh-100">
-            <header class="row mini d-flex align-items-center justify-content-center theme-darkblue">
-                <div class="col-12 mini d-flex justify-content-center gap-3" style="color: white;">
-                    <span>
-                        <a href="index.html" class="button button-link">inicio</a>
-                    </span>
-                    <span>
-                        <a href="encuestas.php" class="button button-link">encuestas</a>
-                    </span>
-                    <span>
-                        <a href="preguntas.html" class="button button-link">ayuda</a>
-                    </span>
-                </div>
-            </header>
-            <main class="row frame flex-grow-1">
-                <div class="col-12 align-items-center justify-content-center gap-3 p-4 rounded" style="background-color: rgba(0, 0, 0, 0.7); margin-top: 20px; margin-bottom: 20px;">
-                    <?php
-                    $sqlCategorias = "SELECT id_categoria, nombre_categoria FROM categoria";
-                    $stmtCategorias = $conexion->prepare($sqlCategorias);
-                    $stmtCategorias->execute();
-                    $categorias = $stmtCategorias->fetchAll(PDO::FETCH_ASSOC);
-                    if (!empty($categorias)): ?>
-                    <div class="accordion" id="accordionCategorias">
-                        <?php foreach ($categorias as $categoria): ?>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button style="background-color: rgba(0, 0, 0, 1); border: 1px solid rgba(255, 255, 255, 0.1); color: white;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?= $categoria['id_categoria'] ?>" aria-expanded="false" aria-controls="panelsStayOpen-collapse<?= $categoria['id_categoria'] ?>">
-                                    <?= htmlspecialchars($categoria['nombre_categoria']) ?>
-                                </button>
-                            </h2>
-                            <div id="collapse<?= $categoria['id_categoria'] ?>" class="accordion-collapse collapse" data-bs-parent="#accordionCategorias">
-                                <div class="accordion-body" style="background-color: rgba(0, 0, 0, 0.01); color: white;">
-                                    <table class="table table-dark table-striped table-hover table-bordered text-white">
-                                        <thead>
-                                            <tr>
-                                                <th>Documento</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $sqlDocumentos = "SELECT id_documento, nombre_documento FROM documento WHERE id_categoria = :id_categoria AND activo = true";
-                                            $stmtDocumentos = $conexion->prepare($sqlDocumentos);
-                                            $stmtDocumentos->bindParam(':id_categoria', $categoria['id_categoria'], PDO::PARAM_INT);
-                                            $stmtDocumentos->execute();
-                                            $documentos = $stmtDocumentos->fetchAll(PDO::FETCH_ASSOC);
-                                            if (empty($documentos)): ?>
-                                                <tr>
-                                                    <td colspan="1" class="text-center">No hay documentos en esta categoría</td>
-                                                </tr>
-                                            <?php else: 
-                                                 foreach ($documentos as $documento): ?>
-                                                    <tr>
-                                                        <td><?= htmlspecialchars($documento['nombre_documento']) ?></td>
-                                                        <td><a href="" class="button button-theme-blue p-1 rounded">Abrir</a></td>
-                                                    </tr>
-                                                <?php endforeach; 
-                                            endif ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="<?= $styles ?>/colorthemes.css">
+    <link rel="stylesheet" href="<?= $styles ?>/button.css">
+    <link rel="stylesheet" href="<?= $styles ?>/card-custom.css">
+    <link rel="stylesheet" href="<?= $styles ?>/main.css">
+    <link rel="stylesheet" href="<?= $styles ?>/sigsm-input.css">
+    <link rel="stylesheet" href="<?= $styles ?>/sigsm-indicator.css">
+    <link rel="stylesheet" href="<?= $styles ?>/shadow.css">
+    <style>
+        .document-container {
+            text-decoration:        none;
+            border:                 none;
+            margin-top:             10px;
+            overflow:               hidden;
+            border-radius:          10px;
+            transition:
+                background-color    .2s ease-out,
+                border-radius       .2s ease-out;
+        }
+
+        .document-container:hover {
+            background-color:   rgb(242, 220, 255);
+            border-radius:        20px;
+        }
+
+        .document-container .document-title      {
+            color:              rgb(36, 33, 38);
+            font-size:            15px;
+            font-weight:          700;
+        }
+
+        .document-container .document-category    {
+            color: rgb(197, 192, 192);
+            font-size:            12px;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid d-flex flex-column min-vh-100">
+        <header class="row" style="z-index: 1">
+            <div id="header-main" class="col-12 d-flex flex-column">
+                <div id="header-main-options" class="col-12 d-flex flex-row justify-content-center align-items-center">
+                    <div class="col-6 d-flex flex-row">
+                        <span>
+                            <a href="#" class="button button-link">Hospital de Clínicas</a>
+                        </span>
                     </div>
-                    <?php else: ?>
-                        <p>No hay categorías disponibles.</p>
-                    <?php endif; ?>
+                    <div class="col-6 d-flex flex-row justify-content-end align-items-center me-1">
+                        <span>
+                            <a href="../login/page.php" class="button button-link">Iniciar sesión</a>
+                        </span>
+                    </div>
                 </div>
-            </main>
-            <footer class="row theme-darkblue justify-content-center mini">
-                <!-- Añadido align-items-center y corregido el ancho de columnas si usas d-flex -->
-                <div class="col-12 d-flex justify-content-center gap-4 align-items-center">
-                    <!-- Eliminados los col-12/col-md-3 para que Flexbox maneje el espacio de forma fluida -->
-                    <section>
-                        <p class="mb-0">E.D.S.U.</p> <!-- mb-0 quita el margen del párrafo -->
-                    </section>
-                    <section>
-                        <p class="mb-0">Hospital de Clínicas</p> <!-- mb-0 quita el margen del párrafo -->
-                    </section>
+                <div id="header-sub" class="col-12 d-flex flex-row justify-content-start align-items-center">
+                    <span>
+                        <a href="#" class="button button-link">Redirecciones</a>
+                    </span>
+                    <span>
+                        <a href="#" class="button button-link">Preguntas</a>
+                    </span>
+                    <span>
+                        <a href="#" class="button button-link">Campañas</a>
+                    </span>
+                    <span>
+                        <a href="#" class="button button-link">Acerca de</a>
+                    </span>
                 </div>
-                <div class="col-12 d-flex justify-content-center">
-                    <p class="mb-0" style="color: rgb(212, 188, 255)">© 2026 Todos los derechos reservados</p> <!-- mb-0 quita el margen del párrafo -->
+            </div>
+        </header>
+
+        <main class="row main-mt d-flex flex-column justify-content-center align-items-center">
+            <div class="col-12 d-flex flex-column justify-content-center align-items-center h-100 gap-3">
+                <!-- Barra de búsqueda -->
+                <div id="content-documents-input" class="col-12 d-flex flex-row align-items-center justify-content-center gap-3">
+                    <input class="col-6 sigsm-input-def" id="document-to-search-input" name="document-to-search-input" placeholder="Buscar...">
                 </div>
-            </footer>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-        <script src="validar.js"></script>
-    </body>
+
+                <hr class="col-6" style="align-self: center; margin: 0; border: 2px solid rgb(212, 202, 202);">
+
+                <!-- Resultados (Añadimos la clase document-card y el atributo data-category) -->
+                <div id="content-documents-results" class="col-12 col-md-11 d-flex flex-md-row flex-wrap justify-content-center align-items-center gap-2">
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        window.categories = <?php echo json_encode($categorias); ?>;
+        window.documents  = <?php echo json_encode($documentos); ?>;
+    </script>
+    <script src="config.js"></script>
+    <script src="<?= $styles ?>/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
 </html>

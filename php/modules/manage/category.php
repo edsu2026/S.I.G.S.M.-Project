@@ -66,6 +66,27 @@
                     $sql->bindParam(":user",             $admin_email,      PDO::PARAM_STR);
                     $sql->execute();
                     break;
+                case 'activate':
+                    $category_id        =   $_POST['category-id-input'];
+
+                    $sql                =   $conexion->prepare("UPDATE categoria SET activo = 1 WHERE id_categoria = :id_categoria");
+                    $sql->execute();
+
+                    break;
+                case 'deactivate':
+                    $category_id        =   $_POST['category-id-input'];
+
+                    $sql                =   $conexion->prepare("UPDATE categoria SET activo = 0 WHERE id_categoria = :id_categoria");
+                    $sql->bindParam(":id_categoria", $category_id, PDO::PARAM_INT);
+                    $sql->execute();
+                    break;
+                case 'delete':
+                    $category_id        =   $_POST['category-id-input'];
+
+                    $sql                =   $conexion->prepare("DELETE FROM categoria WHERE id_categoria = :id_categoria");
+                    $sql->bindParam(":id_categoria", $category_id, PDO::PARAM_INT);
+                    $sql->execute();
+                    break;
                 default:
                     break;
             }
